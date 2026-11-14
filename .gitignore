@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 运行产物
+backend/greenmind.db
+backend/uploads/
+backend/.env
+
+# 其他
+*.log
