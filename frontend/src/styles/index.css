@@ -1,0 +1,219 @@
+/* ============================================================
+   GreenMind 设计系统 — 气体排放监控
+   主色取自"清洁空气与烟气"：深松绿 + 青绿，告警语义黄/橙/红，
+   信息蓝、正常酸绿、点缀紫。冷暖中性色分层背景/表面/描边。
+   ============================================================ */
+
+:root {
+  /* 中性层 */
+  --gm-bg: #eef3f1;
+  --gm-surface: #ffffff;
+  --gm-surface-2: #f4f8f6;
+  --gm-surface-3: #e9f1ed;
+  --gm-ink: #10312c;
+  --gm-ink-soft: #4c6b64;
+  --gm-ink-faint: #8ba49d;
+  --gm-line: #d9e6e0;
+  --gm-line-soft: #e7f0ec;
+
+  /* 主色族（青绿/松绿） */
+  --gm-primary: #0f766e;
+  --gm-primary-strong: #0c5a53;
+  --gm-primary-bright: #14b8a6;
+  --gm-primary-soft: #d7efe9;
+
+  /* 强调与语义 */
+  --gm-green: #16a34a;
+  --gm-green-bright: #34d399;
+  --gm-blue: #0ea5e9;
+  --gm-blue-bright: #38bdf8;
+  --gm-amber: #f59e0b;
+  --gm-orange: #fb923c;
+  --gm-red: #ef4444;
+  --gm-red-deep: #dc2626;
+  --gm-violet: #8b5cf6;
+
+  /* 侧栏深松绿渐变 */
+  --gm-side-1: #082f2b;
+  --gm-side-2: #0f5c54;
+  --gm-side-ink: #cfe9e2;
+  --gm-side-ink-faint: #7faea3;
+
+  /* 阴影 */
+  --gm-shadow-sm: 0 1px 2px rgba(16, 49, 44, 0.06), 0 2px 8px rgba(16, 49, 44, 0.05);
+  --gm-shadow-md: 0 6px 24px rgba(16, 49, 44, 0.1);
+  --gm-shadow-lg: 0 18px 50px rgba(8, 47, 43, 0.22);
+
+  --gm-radius: 14px;
+  --gm-radius-sm: 10px;
+
+  /* Element Plus 主题覆盖 */
+  --el-color-primary: #0f766e;
+  --el-color-primary-light-3: #3d9a91;
+  --el-color-primary-light-5: #6fb8b0;
+  --el-color-primary-light-7: #a2d6d0;
+  --el-color-primary-light-8: #bce4df;
+  --el-color-primary-light-9: #e6f4f1;
+  --el-color-primary-dark-2: #0c5a53;
+  --el-color-success: #16a34a;
+  --el-color-warning: #f59e0b;
+  --el-color-danger: #ef4444;
+  --el-color-error: #ef4444;
+  --el-color-info: #64748b;
+  --el-border-radius-base: 10px;
+  --el-font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+  color: var(--gm-ink);
+  background-color: var(--gm-bg);
+  background-image:
+    radial-gradient(1100px 520px at 100% -8%, rgba(20, 184, 166, 0.1), transparent 60%),
+    radial-gradient(900px 480px at -10% 108%, rgba(14, 165, 233, 0.08), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--gm-primary);
+  text-decoration: none;
+}
+
+/* ---- 自定义滚动条（取色于本系统） ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gm-primary-bright) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--gm-primary-bright), var(--gm-primary));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(var(--gm-primary), var(--gm-primary-strong));
+  background-clip: padding-box;
+}
+
+/* ---- 入场与脉冲动效 ---- */
+@keyframes gm-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gm-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+@keyframes gm-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+@keyframes gm-sheen {
+  0% {
+    background-position: -160% 0;
+  }
+  100% {
+    background-position: 260% 0;
+  }
+}
+
+.gm-fade-up {
+  animation: gm-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.gm-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gm-green-bright);
+  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5);
+  animation: gm-pulse 1.8s ease-in-out infinite;
+}
+
+/* 路由过渡 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* ---- Element Plus 细节调整 ---- */
+.el-button {
+  font-weight: 600;
+}
+.el-card {
+  --el-card-border-color: var(--gm-line-soft);
+  border-radius: var(--gm-radius);
+}
+.el-tag {
+  font-weight: 600;
+}
+
+/* 通用卡片表面 */
+.gm-surface {
+  background: var(--gm-surface);
+  border: 1px solid var(--gm-line-soft);
+  border-radius: var(--gm-radius);
+  box-shadow: var(--gm-shadow-sm);
+}
+
+.gm-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gm-ink-faint);
+  font-weight: 700;
+}
+
+/* 数字采用等宽对齐 */
+.gm-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}

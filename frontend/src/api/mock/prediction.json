@@ -1,0 +1,1882 @@
+{
+  "CEMS-01:pm": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 19.2,
+            "exceed_prob": 0.3
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 21.5,
+            "exceed_prob": 0.5
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 22.7,
+            "exceed_prob": 0.6
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 24.4,
+            "exceed_prob": 0.8
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 26.3,
+            "exceed_prob": 0.9
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 26.3,
+            "exceed_prob": 0.9
+          }
+        ],
+        "drivers": [
+          "除尘器压差变化",
+          "烟气流量波动",
+          "清灰周期影响"
+        ],
+        "confidence": 0.6
+      }
+    },
+    "history": [
+      {
+        "id": 1,
+        "device_id": "CEMS-01",
+        "pollutant": "pm",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 18.2,
+              "exceed_prob": 0.3
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 23.4,
+              "exceed_prob": 0.5
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 24.8,
+              "exceed_prob": 0.6
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 25.2,
+              "exceed_prob": 0.8
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 25.6,
+              "exceed_prob": 0.9
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 25.2,
+              "exceed_prob": 0.9
+            }
+          ],
+          "drivers": [
+            "除尘器压差变化",
+            "烟气流量波动",
+            "清灰周期影响"
+          ],
+          "confidence": 0.5
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 2,
+        "device_id": "CEMS-01",
+        "pollutant": "pm",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 17.6,
+              "exceed_prob": 0.3
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 21.4,
+              "exceed_prob": 0.5
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 24.5,
+              "exceed_prob": 0.6
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 24.6,
+              "exceed_prob": 0.8
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 26,
+              "exceed_prob": 0.9
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 28.3,
+              "exceed_prob": 0.9
+            }
+          ],
+          "drivers": [
+            "除尘器压差变化",
+            "烟气流量波动",
+            "清灰周期影响"
+          ],
+          "confidence": 0.5
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 3,
+        "device_id": "CEMS-01",
+        "pollutant": "pm",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 20.9,
+              "exceed_prob": 0.3
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 20.8,
+              "exceed_prob": 0.5
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 21.8,
+              "exceed_prob": 0.6
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 26.3,
+              "exceed_prob": 0.8
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 24.9,
+              "exceed_prob": 0.9
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 27.9,
+              "exceed_prob": 0.9
+            }
+          ],
+          "drivers": [
+            "除尘器压差变化",
+            "烟气流量波动",
+            "清灰周期影响"
+          ],
+          "confidence": 0.5
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-01:so2": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 52.5,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 47.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 49,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 46.3,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 45.5,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 48.4,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "脱硫浆液 pH",
+          "石灰石供给量",
+          "入口硫分波动"
+        ],
+        "confidence": 0.7
+      }
+    },
+    "history": [
+      {
+        "id": 4,
+        "device_id": "CEMS-01",
+        "pollutant": "so2",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 52.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 46,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 52.4,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 43.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 42.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 50.7,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱硫浆液 pH",
+            "石灰石供给量",
+            "入口硫分波动"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 5,
+        "device_id": "CEMS-01",
+        "pollutant": "so2",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 48.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 44,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 50,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 46.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 49.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 45.1,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱硫浆液 pH",
+            "石灰石供给量",
+            "入口硫分波动"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 6,
+        "device_id": "CEMS-01",
+        "pollutant": "so2",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 49.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 44.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 49.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 48.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 46.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 52.4,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱硫浆液 pH",
+            "石灰石供给量",
+            "入口硫分波动"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-01:nox": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 148.1,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 141.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 135.7,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 138,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 131.7,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 129.3,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "炉膛温度水平",
+          "SNCR 喷氨量",
+          "燃烧配风"
+        ],
+        "confidence": 0.9
+      }
+    },
+    "history": [
+      {
+        "id": 7,
+        "device_id": "CEMS-01",
+        "pollutant": "nox",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 135,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 148.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 122.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 150.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 144.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 126.8,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "炉膛温度水平",
+            "SNCR 喷氨量",
+            "燃烧配风"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 8,
+        "device_id": "CEMS-01",
+        "pollutant": "nox",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 153.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 139.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 140.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 142.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 119.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 125.7,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "炉膛温度水平",
+            "SNCR 喷氨量",
+            "燃烧配风"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 9,
+        "device_id": "CEMS-01",
+        "pollutant": "nox",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 133.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 132.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 129.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 131,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 130.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 116.5,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "炉膛温度水平",
+            "SNCR 喷氨量",
+            "燃烧配风"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-01:co": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 31.1,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 31.4,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 31.8,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 30.6,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 28.5,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 29.5,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "一二次风配比",
+          "给料速率",
+          "炉温稳定性"
+        ],
+        "confidence": 0.8
+      }
+    },
+    "history": [
+      {
+        "id": 10,
+        "device_id": "CEMS-01",
+        "pollutant": "co",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 31.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 29.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 29.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 32.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 30.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 27,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "一二次风配比",
+            "给料速率",
+            "炉温稳定性"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 11,
+        "device_id": "CEMS-01",
+        "pollutant": "co",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 29.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 32.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 33.4,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 32.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 26.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 29.9,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "一二次风配比",
+            "给料速率",
+            "炉温稳定性"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 12,
+        "device_id": "CEMS-01",
+        "pollutant": "co",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 33.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 29.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 34.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 32.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 27.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 27.1,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "一二次风配比",
+            "给料速率",
+            "炉温稳定性"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-01:hcl": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 13,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 13.9,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 13.1,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 13.5,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 12.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 13.3,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "脱酸剂喷射量",
+          "垃圾氯含量",
+          "雾化效果"
+        ],
+        "confidence": 0.7
+      }
+    },
+    "history": [
+      {
+        "id": 13,
+        "device_id": "CEMS-01",
+        "pollutant": "hcl",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 12.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 14.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 12.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 13.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 12.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 13.9,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱酸剂喷射量",
+            "垃圾氯含量",
+            "雾化效果"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 14,
+        "device_id": "CEMS-01",
+        "pollutant": "hcl",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 14,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 15.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 13.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 14.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 11.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 14,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱酸剂喷射量",
+            "垃圾氯含量",
+            "雾化效果"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 15,
+        "device_id": "CEMS-01",
+        "pollutant": "hcl",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 13.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 12.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 13.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 12.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 11.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 12.5,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱酸剂喷射量",
+            "垃圾氯含量",
+            "雾化效果"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-02:pm": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 13.3,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 12.8,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 12.6,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 12.6,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 11.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 11.3,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "除尘器压差变化",
+          "烟气流量波动",
+          "清灰周期影响"
+        ],
+        "confidence": 0.8
+      }
+    },
+    "history": [
+      {
+        "id": 16,
+        "device_id": "CEMS-02",
+        "pollutant": "pm",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 14.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 14,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 13,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 12.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 10.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 10.4,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "除尘器压差变化",
+            "烟气流量波动",
+            "清灰周期影响"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 17,
+        "device_id": "CEMS-02",
+        "pollutant": "pm",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 13.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 13.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 12.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 12.4,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 12,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 12.3,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "除尘器压差变化",
+            "烟气流量波动",
+            "清灰周期影响"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 18,
+        "device_id": "CEMS-02",
+        "pollutant": "pm",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 12.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 12.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 13.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 11.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 11.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 12,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "除尘器压差变化",
+            "烟气流量波动",
+            "清灰周期影响"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-02:so2": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 38.8,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 34.9,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 36.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 34.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 33.6,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 35.7,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "脱硫浆液 pH",
+          "石灰石供给量",
+          "入口硫分波动"
+        ],
+        "confidence": 0.7
+      }
+    },
+    "history": [
+      {
+        "id": 19,
+        "device_id": "CEMS-02",
+        "pollutant": "so2",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 38.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 34,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 38.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 31.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 31.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 37.4,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱硫浆液 pH",
+            "石灰石供给量",
+            "入口硫分波动"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 20,
+        "device_id": "CEMS-02",
+        "pollutant": "so2",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 35.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 32.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 37,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 34.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 36.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 33.2,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱硫浆液 pH",
+            "石灰石供给量",
+            "入口硫分波动"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 21,
+        "device_id": "CEMS-02",
+        "pollutant": "so2",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 36.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 33.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 36.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 35.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 34.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 38.6,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱硫浆液 pH",
+            "石灰石供给量",
+            "入口硫分波动"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-02:nox": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 109.4,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 104.4,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 100.3,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 102,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 97.4,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 95.5,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "炉膛温度水平",
+          "SNCR 喷氨量",
+          "燃烧配风"
+        ],
+        "confidence": 0.9
+      }
+    },
+    "history": [
+      {
+        "id": 22,
+        "device_id": "CEMS-02",
+        "pollutant": "nox",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 99.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 110.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 90.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 111.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 106.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 93.7,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "炉膛温度水平",
+            "SNCR 喷氨量",
+            "燃烧配风"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 23,
+        "device_id": "CEMS-02",
+        "pollutant": "nox",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 113.4,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 102.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 103.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 105.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 88.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 92.9,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "炉膛温度水平",
+            "SNCR 喷氨量",
+            "燃烧配风"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 24,
+        "device_id": "CEMS-02",
+        "pollutant": "nox",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 98.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 97.9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 95.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 96.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 96.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 86,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "炉膛温度水平",
+            "SNCR 喷氨量",
+            "燃烧配风"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-02:co": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 23,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 23.2,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 23.5,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 22.6,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 21,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 21.8,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "一二次风配比",
+          "给料速率",
+          "炉温稳定性"
+        ],
+        "confidence": 0.8
+      }
+    },
+    "history": [
+      {
+        "id": 25,
+        "device_id": "CEMS-02",
+        "pollutant": "co",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 23.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 21.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 22.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 23.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 22.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 19.9,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "一二次风配比",
+            "给料速率",
+            "炉温稳定性"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 26,
+        "device_id": "CEMS-02",
+        "pollutant": "co",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 22,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 24.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 24.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 23.8,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 19.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 22.1,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "一二次风配比",
+            "给料速率",
+            "炉温稳定性"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 27,
+        "device_id": "CEMS-02",
+        "pollutant": "co",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 24.6,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 21.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 25.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 23.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 20.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 20,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "一二次风配比",
+            "给料速率",
+            "炉温稳定性"
+          ],
+          "confidence": 0.8
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  },
+  "CEMS-02:hcl": {
+    "latest": {
+      "base_ts": "2026-11-15T15:00:03",
+      "result": {
+        "hours": [
+          {
+            "ts": "2026-11-15T16:00:03",
+            "value": 9.6,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T17:00:03",
+            "value": 10.3,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T18:00:03",
+            "value": 9.7,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T19:00:03",
+            "value": 10,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T20:00:03",
+            "value": 9,
+            "exceed_prob": 0
+          },
+          {
+            "ts": "2026-11-15T21:00:03",
+            "value": 9.8,
+            "exceed_prob": 0
+          }
+        ],
+        "drivers": [
+          "脱酸剂喷射量",
+          "垃圾氯含量",
+          "雾化效果"
+        ],
+        "confidence": 0.7
+      }
+    },
+    "history": [
+      {
+        "id": 28,
+        "device_id": "CEMS-02",
+        "pollutant": "hcl",
+        "base_ts": "2026-11-15T09:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 9,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 10.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 9.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 10.1,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 9.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 10.3,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱酸剂喷射量",
+            "垃圾氯含量",
+            "雾化效果"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T09:00:03"
+      },
+      {
+        "id": 29,
+        "device_id": "CEMS-02",
+        "pollutant": "hcl",
+        "base_ts": "2026-11-15T03:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 10.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 11.2,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 10.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 10.7,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 8.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 10.3,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱酸剂喷射量",
+            "垃圾氯含量",
+            "雾化效果"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-15T03:00:03"
+      },
+      {
+        "id": 30,
+        "device_id": "CEMS-02",
+        "pollutant": "hcl",
+        "base_ts": "2026-11-14T21:00:03",
+        "result": {
+          "hours": [
+            {
+              "ts": "2026-11-15T16:00:03",
+              "value": 10,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T17:00:03",
+              "value": 9.4,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T18:00:03",
+              "value": 10,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T19:00:03",
+              "value": 9.5,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T20:00:03",
+              "value": 8.3,
+              "exceed_prob": 0
+            },
+            {
+              "ts": "2026-11-15T21:00:03",
+              "value": 9.2,
+              "exceed_prob": 0
+            }
+          ],
+          "drivers": [
+            "脱酸剂喷射量",
+            "垃圾氯含量",
+            "雾化效果"
+          ],
+          "confidence": 0.6
+        },
+        "created_at": "2026-11-14T21:00:03"
+      }
+    ]
+  }
+}
