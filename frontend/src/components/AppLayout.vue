@@ -80,5 +80,5 @@ function logout() {
 .header-right { display: flex; align-items: center; gap: 12px; }
 .real-name { color: #606266; font-size: 14px; }
 .main { background: #f0f2f5; padding: 16px; min-height: 0; display: flex; flex-direction: column; }
-.main :deep(.assistant) { flex: 1; }
+.main > :deep(.assistant-page) { flex: 1; }
 </style>

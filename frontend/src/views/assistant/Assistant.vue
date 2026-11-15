@@ -1,5 +1,5 @@
 <template>
-  <div class="assistant">
+  <div class="assistant-page">
     <div class="sessions">
       <div class="s-head">
         <span>会话</span>
@@ -126,7 +126,7 @@ onMounted(loadSessions)
 </script>
 
 <style scoped>
-.assistant { display: flex; gap: 12px; height: 100%; min-height: 0; min-width: 0; }
+.assistant-page { display: flex; gap: 12px; height: 100%; min-height: 0; min-width: 0; }
 .sessions { flex: 0 0 clamp(180px, 20vw, 260px); background: #fff; border-radius: 6px; padding: 10px; overflow-y: auto; }
 .s-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px; }
 .s-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 4px; cursor: pointer; margin-bottom: 4px; }
@@ -142,7 +142,7 @@ onMounted(loadSessions)
 .input { display: flex; gap: 10px; padding: 12px; border-top: 1px solid #ebeef5; align-items: flex-end; }
 .input :deep(.el-textarea) { flex: 1; min-width: 0; }
 @media (max-width: 700px) {
-  .assistant { flex-direction: column; }
+  .assistant-page { flex-direction: column; }
   .sessions { flex: 0 0 auto; max-height: 130px; }
   .chat { min-height: 0; }
   .bubble { max-width: 92%; }
