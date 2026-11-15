@@ -2,7 +2,7 @@
   <div class="wos">
     <div class="stats-bar">
       <div v-for="(label, st) in statusLabels" :key="st" class="stat" :class="st">
-        <div class="num">{{ stats.by_status[st as keyof typeof stats.by_status] ?? 0 }}</div>
+        <div class="num">{{ statusCount(st) }}</div>
         <div class="lbl">{{ label }}</div>
       </div>
       <div class="load">
@@ -169,6 +169,10 @@ const finishNote = ref('')
 const createForm = reactive({ device_id: 'CEMS-01', title: '', description: '', priority: 'medium' })
 
 const allOrders = computed(() => (view.value === 'kanban' ? all.value : page.value.items))
+
+function statusCount(st: string | number | symbol): number {
+  return (stats.value.by_status as Record<string, number>)[String(st)] ?? 0
+}
 
 function byStatus(st: string) {
   return allOrders.value.filter((w) => w.status === st)

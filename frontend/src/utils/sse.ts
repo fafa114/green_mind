@@ -1,4 +1,4 @@
-import type { AlarmEvent, ChatMessage } from '../types'
+import type { AlarmEvent } from '../types'
 import { useUserStore } from '../stores/user'
 
 export interface AlarmStreamHandlers {
@@ -8,7 +8,7 @@ export interface AlarmStreamHandlers {
 }
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
-const REAL_MODULES = (import.meta.env.VITE_REAL_MODULES || '').split(',').map((s) => s.trim()).filter(Boolean)
+const REAL_MODULES = (import.meta.env.VITE_REAL_MODULES || '').split(',').map((s: string) => s.trim()).filter(Boolean)
 
 export function useReal(module: string): boolean {
   return !USE_MOCK || REAL_MODULES.includes(module)
@@ -46,34 +46,13 @@ export function connectAlarmStream(handlers: AlarmStreamHandlers): () => void {
   return () => es.close()
 }
 
-/** 助手聊天：POST SSE（token 事件追加，done 结束）。mock 用分段文本模拟流式。 */
+/** 助手聊天：POST SSE，逐条解析服务端事件。 */
 export async function streamChat(
   sessionId: number,
   message: string,
   onToken: (text: string) => void,
   onDone: (messageId: number) => void,
 ): Promise<void> {
-  if (!useReal('assistant')) {
-    const replies = [
-      '上月 SO₂ 折算浓度最大值为 96.2 mg/m³（标准 80 mg/m³），出现在 10 月 20 日 14:00，持续约 40 分钟后回落，建议关注布袋除尘器压差。',
-      '近 30 天共产生告警 18 条：黄色 11、橙色 5、红色 2；红色告警集中在 CEMS-01 颗粒物通道，建议优先检查采样管路。',
-      '当前 2 台设备健康度：CEMS-01 为 72 分（校准逾期 35 天是主要扣分项），CEMS-02 为 91 分。建议尽快安排 CEMS-01 校准。',
-      '根据近 24 小时数据，各污染物浓度平稳，无超标风险。炉温均值 941℃，处于正常区间。',
-    ]
-    const text = message.includes('SO') || message.includes('so2') ? replies[0]
-      : message.includes('告警') ? replies[1]
-      : message.includes('健康') ? replies[2]
-      : replies[3]
-    let acc = ''
-    for (const ch of text) {
-      acc += ch
-      onToken(ch)
-      await new Promise((r) => setTimeout(r, 18))
-    }
-    onDone(Date.now())
-    return
-  }
-
   const res = await fetch('/api/assistant/chat', {
     method: 'POST',
     headers: {
@@ -88,24 +67,33 @@ export async function streamChat(
   const reader = res.body.getReader()
   const decoder = new TextDecoder()
   let buffer = ''
+  let completed = false
+  const dispatch = (frame: string) => {
+    const lines = frame.split('\n')
+    const kind = lines.find((line) => line.startsWith('event:'))?.slice(6).trim()
+    const raw = lines.filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trimStart()).join('\n')
+    if (!raw) return
+    const data = JSON.parse(raw)
+    if (kind === 'token' && typeof data.text === 'string') onToken(data.text)
+    if (kind === 'done') {
+      completed = true
+      onDone(data.message_id)
+    }
+    if (kind === 'error') throw new Error(data.detail || '助手暂不可用')
+  }
   for (;;) {
     const { done, value } = await reader.read()
     if (done) break
     buffer += decoder.decode(value, { stream: true })
-    const lines = buffer.split('\n')
-    buffer = lines.pop() || ''
-    for (const line of lines) {
-      if (line.startsWith('event:token')) { (window as any).__sseKind = 'token' }
-      if (line.startsWith('event:done')) { (window as any).__sseKind = 'done' }
-      if (line.startsWith('data:')) {
-        try {
-          const data = JSON.parse(line.slice(5))
-          if ((window as any).__sseKind === 'token' && data.text) onToken(data.text)
-          if ((window as any).__sseKind === 'done' && data.message_id) onDone(data.message_id)
-        } catch { /* 忽略坏包 */ }
-      }
+    buffer = buffer.replace(/\r\n/g, '\n')
+    let boundary = buffer.indexOf('\n\n')
+    while (boundary !== -1) {
+      dispatch(buffer.slice(0, boundary))
+      buffer = buffer.slice(boundary + 2)
+      boundary = buffer.indexOf('\n\n')
     }
   }
+  buffer += decoder.decode()
+  if (buffer.trim()) dispatch(buffer)
+  if (!completed) throw new Error('助手响应意外中断')
 }
-
-export type { ChatMessage }

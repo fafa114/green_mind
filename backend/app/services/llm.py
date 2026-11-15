@@ -84,6 +84,26 @@ async def _stream_once(client: httpx.AsyncClient, url, headers, payload, model, 
     _log_call(model, usage, time.time() - t0)
 
 
+async def _stream_with_retries(url, headers, payload, attempts) -> AsyncIterator[str]:
+    last_error: Optional[Exception] = None
+    for model, delay in attempts:
+        if delay:
+            await asyncio.sleep(delay)
+        request_payload = {**payload, "model": model}
+        emitted = False
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                async for token in _stream_once(client, url, headers, request_payload, model, time.time()):
+                    emitted = True
+                    yield token
+            return
+        except (_Retryable, httpx.TimeoutException, httpx.TransportError) as exc:
+            if emitted:
+                raise LLMError("LLM 流式响应中断") from exc
+            last_error = exc
+    raise LLMError("LLM 调用失败：%s" % last_error)
+
+
 async def chat(
     messages: List[Dict[str, Any]],
     tools: Optional[List[Dict[str, Any]]] = None,
@@ -107,6 +127,8 @@ async def chat(
         (settings.llm_model, 1),
         (settings.llm_fallback_model, 3),
     ]
+    if stream:
+        return _stream_with_retries(url, headers, payload, attempts)
     last_error: Optional[Exception] = None
     for model, delay in attempts:
         if delay:
@@ -115,8 +137,6 @@ async def chat(
         t0 = time.time()
         try:
             async with httpx.AsyncClient(timeout=60.0) as client:
-                if stream:
-                    return _stream_once(client, url, headers, payload, model, t0)
                 r = await client.post(url, json=payload, headers=headers)
                 if r.status_code == 429 or r.status_code >= 500:
                     raise _Retryable("HTTP %d" % r.status_code)

@@ -1,5 +1,5 @@
 <template>
-  <div class="assistant">
+  <div class="assistant-page">
     <div class="sessions">
       <div class="s-head">
         <span>会话</span>
@@ -35,7 +35,7 @@
         <el-input
           v-model="draft"
           type="textarea"
-          :rows="2"
+          :autosize="{ minRows: 2, maxRows: 8 }"
           placeholder="输入问题，例如：上月 SO₂ 最大值是多少？ (Enter 发送，Shift+Enter 换行)"
           @keydown.enter.exact.prevent="send"
         />
@@ -47,6 +47,7 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 import MarkdownView from '../../components/MarkdownView.vue'
 import { createSession, deleteSession, listMessages, listSessions } from '../../api/assistant'
 import { streamChat } from '../../utils/sse'
@@ -103,8 +104,15 @@ async function send() {
       messages.value.push({ role: 'assistant', content: streamText.value })
       streamText.value = ''
     })
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : '助手暂不可用')
+    if (streamText.value) {
+      messages.value.push({ role: 'assistant', content: streamText.value + '\n\n[回复中断]' })
+      streamText.value = ''
+    }
   } finally {
     streaming.value = false
+    scrollBottom()
   }
 }
 
@@ -118,18 +126,25 @@ onMounted(loadSessions)
 </script>
 
 <style scoped>
-.assistant { display: flex; gap: 12px; height: calc(100vh - 130px); }
-.sessions { width: 230px; background: #fff; border-radius: 6px; padding: 10px; overflow-y: auto; }
+.assistant-page { display: flex; gap: 12px; height: 100%; min-height: 0; min-width: 0; }
+.sessions { flex: 0 0 clamp(180px, 20vw, 260px); background: #fff; border-radius: 6px; padding: 10px; overflow-y: auto; }
 .s-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px; }
 .s-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 4px; cursor: pointer; margin-bottom: 4px; }
 .s-item:hover { background: #f5f7fa; }
 .s-item.active { background: #ecf5ff; color: #409eff; }
 .s-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.chat { flex: 1; background: #fff; border-radius: 6px; display: flex; flex-direction: column; }
-.messages { flex: 1; overflow-y: auto; padding: 16px; }
+.chat { flex: 1; min-width: 0; min-height: 0; background: #fff; border-radius: 6px; display: flex; flex-direction: column; }
+.messages { flex: 1; min-height: 0; overflow-y: auto; padding: 16px; }
 .msg { display: flex; margin-bottom: 12px; }
 .msg.user { justify-content: flex-end; }
-.bubble { max-width: 78%; padding: 10px 14px; border-radius: 10px; background: #f4f4f5; }
+.bubble { max-width: min(78%, 72ch); min-width: 0; overflow-wrap: anywhere; padding: 10px 14px; border-radius: 10px; background: #f4f4f5; }
 .msg.user .bubble { background: #409eff; color: #fff; }
 .input { display: flex; gap: 10px; padding: 12px; border-top: 1px solid #ebeef5; align-items: flex-end; }
+.input :deep(.el-textarea) { flex: 1; min-width: 0; }
+@media (max-width: 700px) {
+  .assistant-page { flex-direction: column; }
+  .sessions { flex: 0 0 auto; max-height: 130px; }
+  .chat { min-height: 0; }
+  .bubble { max-width: 92%; }
+}
 </style>

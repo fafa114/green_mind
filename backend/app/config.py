@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,6 +13,9 @@ class Settings(BaseSettings):
     llm_model: str = "deepseek-chat"
     llm_fallback_model: str = "qwen-plus"
     upload_dir: str = "./uploads"
+    cems_excel_path: str = ""
+    cems_device_id: str = "XA-3"
+    replay_speed: float = Field(default=60.0, gt=0, le=3600)
     pdf_font_path: str = "C:/Windows/Fonts/simhei.ttf"
 
 

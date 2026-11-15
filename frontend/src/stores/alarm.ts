@@ -15,7 +15,11 @@ export const useAlarmStore = defineStore('alarm', {
   actions: {
     start() {
       if (disconnect) return
-      disconnect = connectAlarmStream((event) => this.push(event), () => { this.connected = true }, () => { this.connected = false })
+      disconnect = connectAlarmStream({
+        onAlarm: (event) => this.push(event),
+        onOpen: () => { this.connected = true },
+        onClose: () => { this.connected = false },
+      })
     },
     stop() {
       disconnect?.()

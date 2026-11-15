@@ -146,6 +146,8 @@ export interface PredictionResult {
   hours: { ts: string; value: number; exceed_prob: number }[]
   drivers: string[]
   confidence: number
+  experimental?: boolean
+  notice?: string
 }
 
 export interface Prediction { id: number; device_id: string; pollutant: string; base_ts: string; result: PredictionResult; created_at: string }

@@ -2,8 +2,7 @@
   <div class="pred">
     <div class="filters">
       <el-select v-model="deviceId" style="width: 220px" @change="reload">
-        <el-option label="CEMS-01 1# 焚烧线" value="CEMS-01" />
-        <el-option label="CEMS-02 2# 焚烧线" value="CEMS-02" />
+        <el-option v-for="d in devices" :key="d.device_id" :label="`${d.device_id} ${d.name}`" :value="d.device_id" />
       </el-select>
       <el-select v-model="pollutant" style="width: 130px" @change="reload">
         <el-option v-for="p in POLLUTANTS" :key="p.key" :label="p.name" :value="p.key" />
@@ -12,7 +11,7 @@
     </div>
 
     <div class="panel">
-      <div class="panel-title">历史（实线，近 24h）与预测（虚线，未来 6h） · 置信度 {{ confidenceText }}</div>
+      <div class="panel-title">历史回放（实线，近 24h）与趋势参考（虚线，未来 6h） · 置信度 {{ confidenceText }}</div>
       <TrendChart height="320px" :series="series" :area="bandArea" :y-axis="[{ name: 'mg/m³' }]" />
     </div>
 
@@ -20,14 +19,14 @@
       <div class="panel">
         <div class="panel-title">逐小时超标概率</div>
         <TrendChart v-if="probs.length" height="240px" :series="[{ name: '超标概率', data: probs, type: 'bar' }]" :y-axis="[{ name: '概率', max: 1 }]" />
-        <el-empty v-else description="暂无预测数据" :image-size="60" />
+        <el-empty v-else description="暂无经过校准的超标概率" :image-size="60" />
       </div>
       <div class="panel">
         <div class="panel-title">驱动因素</div>
         <ul class="drivers">
           <li v-for="(d, i) in drivers" :key="i">{{ d }}</li>
         </ul>
-        <div class="note">预测结果为“方向性趋势参考”，不构成精确数值承诺。</div>
+        <div class="note">{{ prediction?.result.notice || '有效样本不足时等待回放推进；趋势参考不构成合规结论。' }}</div>
       </div>
     </div>
   </div>
@@ -38,20 +37,21 @@ import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import TrendChart from '../../components/TrendChart.vue'
 import { getLatestPrediction, refreshPredictions } from '../../api/predictions'
-import { getHistory } from '../../api/data'
+import { getHistory, getReplay, listDataDevices } from '../../api/data'
 import { useUserStore } from '../../stores/user'
-import { POLLUTANTS, type Prediction } from '../../types'
+import { POLLUTANTS, type DeviceInfo, type Prediction } from '../../types'
 
 const userStore = useUserStore()
-const deviceId = ref('CEMS-01')
+const devices = ref<DeviceInfo[]>([])
+const deviceId = ref('')
 const pollutant = ref('so2')
 const prediction = ref<Prediction | null>(null)
-const hist: [string, number][] = []
+const hist = ref<[string, number][]>([])
 const refreshing = ref(false)
 
 const series = computed(() => {
   const out: { name: string; data: [string, number][]; dashed?: boolean }[] = []
-  if (hist.length) out.push({ name: '历史浓度', data: hist })
+  if (hist.value.length) out.push({ name: '历史浓度', data: hist.value })
   if (prediction.value) {
     out.push({ name: '预测浓度', data: prediction.value.result.hours.map((h) => [h.ts, h.value]), dashed: true })
   }
@@ -59,7 +59,7 @@ const series = computed(() => {
 })
 
 const bandArea = computed(() => {
-  if (!prediction.value) return []
+  if (!prediction.value || prediction.value.result.experimental) return []
   const c = prediction.value.result.confidence
   const band = prediction.value.result.hours.map((h) => {
     const lo = Math.max(0, h.value * (1 - (1 - c)))
@@ -68,20 +68,28 @@ const bandArea = computed(() => {
   return [{ name: '置信区间', data: band }]
 })
 
-const probs = computed(() => (prediction.value ? prediction.value.result.hours.map((h) => [h.ts, h.exceed_prob] as [string, number]) : []))
+const probs = computed(() => (prediction.value && !prediction.value.result.experimental ? prediction.value.result.hours.map((h) => [h.ts, h.exceed_prob] as [string, number]) : []))
 const drivers = computed(() => prediction.value?.result.drivers || [])
-const confidenceText = computed(() => prediction.value ? Math.round(prediction.value.result.confidence * 100) + '%' : '--')
+const confidenceText = computed(() => prediction.value && !prediction.value.result.experimental ? Math.round(prediction.value.result.confidence * 100) + '%' : '--')
+
+function localTime(value: Date): string {
+  const n = (x: number) => String(x).padStart(2, '0')
+  return `${value.getFullYear()}-${n(value.getMonth() + 1)}-${n(value.getDate())}T${n(value.getHours())}:${n(value.getMinutes())}:${n(value.getSeconds())}`
+}
 
 async function reload() {
-  const end = new Date().toISOString().slice(0, 19)
-  const start = new Date(Date.now() - 24 * 3600000).toISOString().slice(0, 19)
-  const [h, p] = await Promise.all([
-    getHistory({ device_id: deviceId.value, start, end, interval: 'hour' }),
-    getLatestPrediction(deviceId.value, pollutant.value),
-  ])
-  hist.length = 0
-  for (const r of h.items) hist.push([r.ts, Number(r[pollutant.value + '_std'] ?? 0)])
-  prediction.value = p
+  if (!deviceId.value) return
+  const replay = await getReplay(deviceId.value)
+  const cursor = new Date(replay.cursor)
+  const end = localTime(new Date(cursor.getTime() + 1000))
+  const start = localTime(new Date(Math.max(new Date(replay.source_start).getTime(), cursor.getTime() - 24 * 3600000)))
+  const h = await getHistory({ device_id: deviceId.value, start, end, interval: 'hour' })
+  hist.value = h.items.map((r) => [r.ts, Number(r[pollutant.value + '_std'] ?? 0)] as [string, number])
+  try {
+    prediction.value = await getLatestPrediction(deviceId.value, pollutant.value)
+  } catch {
+    prediction.value = null
+  }
 }
 
 async function refresh() {
@@ -95,7 +103,11 @@ async function refresh() {
   }
 }
 
-onMounted(reload)
+onMounted(async () => {
+  devices.value = await listDataDevices()
+  deviceId.value = devices.value[0]?.device_id || ''
+  await reload()
+})
 </script>
 
 <style scoped>
