@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 import app.models  # noqa: F401 注册全部表
 from app.config import settings
 from app.db import Base, engine
-from app.routers import auth, device, inspection, report, workorder
+from app.routers import alarm, assistant, auth, data, device, inspection, prediction, report, workorder
 from app.services.jobs import scheduler
 from app.utils.oplog import LogMiddleware
 
@@ -26,6 +26,10 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(data.router)
+app.include_router(alarm.router)
+app.include_router(prediction.router)
+app.include_router(assistant.router)
 app.include_router(auth.users_router)
 app.include_router(workorder.router)
 app.include_router(device.router)

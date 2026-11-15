@@ -60,3 +60,32 @@ scheduler = BackgroundScheduler(timezone="UTC")
 scheduler.add_job(check_sla, "interval", minutes=5, id="sla_check")
 scheduler.add_job(refresh_all_health, "cron", day=1, hour=1, id="health_refresh")
 scheduler.add_job(generate_monthly_report, "cron", day=1, hour=2, id="report_generate")
+
+
+def scan_alarms():
+    from app.routers.alarm import scan
+    db = SessionLocal()
+    try:
+        scan(db)
+    finally:
+        db.close()
+
+
+def refresh_predictions():
+    from app.models import CemsRaw
+    from app.routers.prediction import POLLUTANTS, make_prediction
+    db = SessionLocal()
+    try:
+        device_ids = [x[0] for x in db.query(CemsRaw.device_id).distinct().all()]
+        for device_id in device_ids:
+            for pollutant in POLLUTANTS:
+                try:
+                    make_prediction(db, device_id, pollutant)
+                except Exception:
+                    db.rollback()
+    finally:
+        db.close()
+
+
+scheduler.add_job(scan_alarms, 'interval', seconds=60, id='alarm_scan', max_instances=1)
+scheduler.add_job(refresh_predictions, 'interval', hours=1, id='prediction_refresh', max_instances=1)
