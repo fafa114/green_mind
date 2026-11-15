@@ -54,13 +54,19 @@ def test_assistant_stream_and_history(monkeypatch):
     from app.routers import assistant
     async def fake_chat(messages, **kwargs):
         assert 'pollutant_max' in messages[-1]['content']
-        return '已查询设备数据。'
+        assert kwargs['stream'] is True
+        async def tokens():
+            yield '已查询'
+            yield '设备数据。'
+        return tokens()
     monkeypatch.setattr(assistant.llm.settings, 'llm_api_key', 'test-key')
     monkeypatch.setattr(assistant.llm, 'chat', fake_chat)
     h = auth('apiadmin')
     sid = client.post('/api/assistant/sessions', headers=h, json={'title': 'stream'}).json()['id']
     result = client.post('/api/assistant/chat', headers=h, json={'session_id': sid, 'message': '数据如何？'})
     assert result.status_code == 200
-    assert 'event: token' in result.text and 'event: done' in result.text
+    assert result.text.count('event: token') == 2 and 'event: done' in result.text
+    assert '已查询' in result.text and '设备数据。' in result.text
     history = client.get(f'/api/assistant/sessions/{sid}/messages', headers=h).json()
     assert [m['role'] for m in history] == ['user', 'assistant']
+    assert history[-1]['content'] == '已查询设备数据。'

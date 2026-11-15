@@ -78,11 +78,14 @@ async def chat(body: ChatBody, db: Session = Depends(get_db), user: User = Depen
               {'role': 'user', 'content': '查询结果: '+json.dumps(evidence, ensure_ascii=False)+'\n问题: '+body.message}]
     async def events():
         try:
-            answer = await llm.chat(prompt)
-            if not isinstance(answer, str):
+            chunks = await llm.chat(prompt, stream=True)
+            answer_parts = []
+            async for token in chunks:
+                answer_parts.append(token)
+                yield 'event: token\ndata: '+json.dumps({'text': token}, ensure_ascii=False)+'\n\n'
+            answer = ''.join(answer_parts)
+            if not answer:
                 raise llm.LLMError('LLM 未返回文本')
-            for start in range(0, len(answer), 24):
-                yield 'event: token\ndata: '+json.dumps({'text': answer[start:start+24]}, ensure_ascii=False)+'\n\n'
             session = SessionLocal()
             try:
                 reply = ChatMessage(session_id=body.session_id, role='assistant', content=answer)
@@ -92,4 +95,4 @@ async def chat(body: ChatBody, db: Session = Depends(get_db), user: User = Depen
                 session.close()
         except Exception:
             yield 'event: error\ndata: '+json.dumps({'detail': '助手暂不可用'}, ensure_ascii=False)+'\n\n'
-    return StreamingResponse(events(), media_type='text/event-stream')
+    return StreamingResponse(events(), media_type='text/event-stream', headers={'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no'})
