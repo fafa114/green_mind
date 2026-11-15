@@ -1,3 +1,4 @@
+from typing import Optional
 import json
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException
@@ -12,7 +13,7 @@ from app.utils.deps import get_current_user, get_db
 router = APIRouter(prefix='/api/assistant', tags=['assistant'])
 
 class SessionBody(BaseModel):
-    title: str | None = Field(default=None, max_length=128)
+    title: Optional[str] = Field(default=None, max_length=128)
 
 class ChatBody(BaseModel):
     session_id: int

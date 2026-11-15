@@ -1,3 +1,4 @@
+from typing import Optional
 import asyncio
 import json
 from datetime import datetime, timedelta
@@ -18,7 +19,7 @@ POLLUTANTS = ('pm', 'so2', 'nox', 'co', 'hcl')
 def alarm_dict(a):
     return {c.name: getattr(a, c.name) for c in Alarm.__table__.columns}
 
-def scan(db: Session, since: datetime | None = None):
+def scan(db: Session, since: Optional[datetime] = None):
     replay_states = db.query(ReplayState).all() if since is None else []
     if replay_states:
         rows = []
@@ -89,8 +90,8 @@ async def stream(token: str, db: Session = Depends(get_db)):
     return StreamingResponse(events(), media_type='text/event-stream')
 
 @router.get('')
-def list_alarms(level: str | None = None, status: str | None = None, device_id: str | None = None,
-                start: datetime | None = None, end: datetime | None = None, page: int = Query(1, ge=1),
+def list_alarms(level: Optional[str] = None, status: Optional[str] = None, device_id: Optional[str] = None,
+                start: Optional[datetime] = None, end: Optional[datetime] = None, page: int = Query(1, ge=1),
                 page_size: int = Query(20, ge=1, le=100), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     q = db.query(Alarm)
     for column, value in ((Alarm.level, level), (Alarm.status, status), (Alarm.device_id, device_id)):

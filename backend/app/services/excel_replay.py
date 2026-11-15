@@ -1,4 +1,5 @@
 """Import one CEMS .xls source and expose a repeatable replay clock."""
+from typing import Optional
 from datetime import datetime, timedelta
 from pathlib import Path
 import re
@@ -96,7 +97,7 @@ def initialize():
     finally:
         db.close()
 
-def current_cursor(db: Session, device_id: str, now: datetime | None = None):
+def current_cursor(db: Session, device_id: str, now: Optional[datetime] = None):
     replay = db.query(ReplayState).filter(ReplayState.device_id == device_id).first()
     if not replay:
         return None

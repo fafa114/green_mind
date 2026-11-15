@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import date, datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func
@@ -21,7 +22,7 @@ def devices(db: Session = Depends(get_db)):
     return [{'device_id': code, 'name': names.get(code, code), 'last_ts': current_cursor(db, code) or ts} for code, ts in latest.items()]
 
 @router.get('/latest')
-def latest(device_id: str, as_of: datetime | None = None, db: Session = Depends(get_db)):
+def latest(device_id: str, as_of: Optional[datetime] = None, db: Session = Depends(get_db)):
     cursor = current_cursor(db, device_id)
     if cursor and (as_of is None or as_of > cursor):
         as_of = cursor
