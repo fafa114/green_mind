@@ -30,7 +30,7 @@
           </div>
           <div v-if="current.stats" class="p-stats">
             <el-descriptions :column="3" border size="small">
-              <el-descriptions-item v-for="(s, k) in current.stats.pollutants || {}" :key="k" :label="pollutantName(k)">
+              <el-descriptions-item v-for="(s, k) in current.stats.pollutants || {}" :key="k" :label="pollutantName(String(k))">
                 最大 {{ s.max ?? '--' }} / 均值 {{ s.avg ?? '--' }} / 超标 {{ s.exceed_hours ?? s.exceed_count ?? 0 }}h
               </el-descriptions-item>
               <el-descriptions-item label="告警">

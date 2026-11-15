@@ -1,10 +1,4 @@
 from datetime import datetime, timedelta
-import os
-import tempfile
-
-os.environ['DATABASE_URL'] = 'sqlite:///' + tempfile.mktemp(suffix='.db')
-os.environ['JWT_SECRET'] = 'integration-test-secret'
-
 from fastapi.testclient import TestClient
 from app.db import Base, SessionLocal, engine
 import app.models

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from app.models import CemsRaw, Device, Prediction
 from app.utils.deps import get_current_user, get_db, require_role
+from app.services.excel_replay import current_cursor
 
 router = APIRouter(prefix='/api/predictions', tags=['predictions'], dependencies=[Depends(get_current_user)])
 POLLUTANTS = ('pm', 'so2', 'nox', 'co', 'hcl')
@@ -15,7 +16,11 @@ def pred_dict(p):
     return {c.name: getattr(p, c.name) for c in Prediction.__table__.columns}
 
 def make_prediction(db: Session, device_id: str, pollutant: str):
-    latest = db.query(CemsRaw.ts).filter(CemsRaw.device_id == device_id).order_by(CemsRaw.ts.desc()).first()
+    q = db.query(CemsRaw.ts).filter(CemsRaw.device_id == device_id)
+    cursor = current_cursor(db, device_id)
+    if cursor:
+        q = q.filter(CemsRaw.ts <= cursor)
+    latest = q.order_by(CemsRaw.ts.desc()).first()
     if not latest:
         raise HTTPException(404, '监测数据不存在')
     base = latest[0].replace(minute=0, second=0, microsecond=0)
@@ -37,6 +42,9 @@ def latest(device_id: str, pollutant: str, db: Session = Depends(get_db)):
     if pollutant not in POLLUTANTS:
         raise HTTPException(400, '未知污染物')
     row = db.query(Prediction).filter(Prediction.device_id == device_id, Prediction.pollutant == pollutant).order_by(Prediction.id.desc()).first()
+    cursor = current_cursor(db, device_id)
+    if row and cursor and row.base_ts > cursor:
+        row = None
     if not row:
         row = make_prediction(db, device_id, pollutant)
     return pred_dict(row)

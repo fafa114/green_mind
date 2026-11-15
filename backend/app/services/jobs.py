@@ -87,5 +87,5 @@ def refresh_predictions():
         db.close()
 
 
-scheduler.add_job(scan_alarms, 'interval', seconds=60, id='alarm_scan', max_instances=1)
+scheduler.add_job(scan_alarms, 'interval', seconds=5, id='alarm_scan', max_instances=1)
 scheduler.add_job(refresh_predictions, 'interval', hours=1, id='prediction_refresh', max_instances=1)

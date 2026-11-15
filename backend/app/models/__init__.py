@@ -7,10 +7,11 @@ from app.models.inspection import Inspection
 from app.models.oplog import OperationLog
 from app.models.prediction import Prediction
 from app.models.report import Report
+from app.models.replay import ReplayState
 from app.models.user import User
 from app.models.workorder import WorkOrder
 
 __all__ = [
     "Alarm", "CemsRaw", "ChatMessage", "ChatSession", "Device", "HealthScore",
-    "Inspection", "OperationLog", "Prediction", "Report", "User", "WorkOrder",
+    "Inspection", "OperationLog", "Prediction", "Report", "ReplayState", "User", "WorkOrder",
 ]

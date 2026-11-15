@@ -9,6 +9,7 @@ from app.config import settings
 from app.db import Base, engine
 from app.routers import alarm, assistant, auth, data, device, inspection, prediction, report, workorder
 from app.services.jobs import scheduler
+from app.services.excel_replay import initialize as initialize_replay
 from app.utils.oplog import LogMiddleware
 
 Base.metadata.create_all(bind=engine)
@@ -42,6 +43,7 @@ app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads"
 
 @app.on_event("startup")
 def start_scheduler():
+    initialize_replay()
     if not scheduler.running:
         scheduler.start()
 

@@ -15,11 +15,12 @@ const props = defineProps<{
   limit?: number | null
   unit?: string
   digits?: number
+  active?: boolean
 }>()
 
 const displayValue = computed(() => (props.value === null || props.value === undefined) ? '--' : Number(props.value).toFixed(props.digits ?? 2))
 const limitText = computed(() => (props.limit === null || props.limit === undefined) ? '--' : `${Number(props.limit).toFixed(props.digits ?? 0)}${props.unit || ''}`)
-const isExceed = computed(() => props.value != null && props.limit != null && props.value > props.limit)
+const isExceed = computed(() => props.active !== false && props.value != null && props.limit != null && props.value > props.limit)
 </script>
 
 <style scoped>

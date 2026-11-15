@@ -12,7 +12,7 @@
         </el-form-item>
         <el-button type="primary" class="submit" :loading="loading" @click="submit">登 录</el-button>
       </el-form>
-      <div class="hint">演示账号：admin / engineer1 / engineer2 / viewer，密码 123456</div>
+      <div class="hint">请使用管理员创建的账号登录</div>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 
-const form = reactive({ username: 'admin', password: '123456' })
+const form = reactive({ username: '', password: '' })
 const loading = ref(false)
 
 async function submit() {

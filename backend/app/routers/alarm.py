@@ -7,7 +7,8 @@ from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from app.config import settings
 from app.db import SessionLocal
-from app.models import Alarm, CemsRaw, User
+from app.models import Alarm, CemsRaw, ReplayState, User
+from app.services.excel_replay import current_cursor
 from app.services import workorder_svc
 from app.utils.deps import get_current_user, get_db, require_role
 
@@ -18,8 +19,17 @@ def alarm_dict(a):
     return {c.name: getattr(a, c.name) for c in Alarm.__table__.columns}
 
 def scan(db: Session, since: datetime | None = None):
-    cutoff = since or (datetime.utcnow() - timedelta(minutes=10))
-    rows = db.query(CemsRaw).filter(CemsRaw.ts >= cutoff, CemsRaw.condition_flag != 'shutdown').order_by(CemsRaw.ts).all()
+    replay_states = db.query(ReplayState).all() if since is None else []
+    if replay_states:
+        rows = []
+        for state in replay_states:
+            cursor = current_cursor(db, state.device_id)
+            rows.extend(db.query(CemsRaw).filter(CemsRaw.device_id == state.device_id,
+                CemsRaw.ts > cursor - timedelta(minutes=max(6, state.speed / 10 + 1)),
+                CemsRaw.ts <= cursor, CemsRaw.condition_flag == 'normal').order_by(CemsRaw.ts).all())
+    else:
+        cutoff = since or (datetime.utcnow() - timedelta(minutes=10))
+        rows = db.query(CemsRaw).filter(CemsRaw.ts >= cutoff, CemsRaw.condition_flag == 'normal').order_by(CemsRaw.ts).all()
     created = []
     for row in rows:
         candidates = []
@@ -63,6 +73,7 @@ async def stream(token: str, db: Session = Depends(get_db)):
     latest = db.query(Alarm.id).order_by(Alarm.id.desc()).first()
     async def events():
         last_id = latest[0] if latest else 0
+        yield ': connected\n\n'
         while True:
             session = SessionLocal()
             try:

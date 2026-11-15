@@ -8,7 +8,7 @@ export interface AlarmStreamHandlers {
 }
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
-const REAL_MODULES = (import.meta.env.VITE_REAL_MODULES || '').split(',').map((s) => s.trim()).filter(Boolean)
+const REAL_MODULES = (import.meta.env.VITE_REAL_MODULES || '').split(',').map((s: string) => s.trim()).filter(Boolean)
 
 export function useReal(module: string): boolean {
   return !USE_MOCK || REAL_MODULES.includes(module)

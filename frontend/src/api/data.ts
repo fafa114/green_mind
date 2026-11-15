@@ -22,3 +22,16 @@ export function getOverview(deviceId: string, date: string): Promise<DataOvervie
   if (!useReal('data')) return mockOverview(deviceId)
   return http.get('/data/overview', { params: { device_id: deviceId, date } })
 }
+
+export interface ReplayStatus {
+  device_id: string
+  source_start: string
+  source_end: string
+  cursor: string
+  speed: number
+  mode: 'historical_replay'
+}
+
+export function getReplay(deviceId: string): Promise<ReplayStatus> {
+  return http.get('/data/replay', { params: { device_id: deviceId } })
+}
