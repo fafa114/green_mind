@@ -26,10 +26,10 @@
 
 **Purpose**: 工程初始化与基础结构
 
-- [ ] T001 初始化 frontend/ Vite+Vue3+TS 工程：创建 frontend/package.json（scripts: dev/build/preview，build=`vue-tsc --noEmit && vite build`；dependencies 按宪法 II 锁定清单：vue、vue-router、pinia、element-plus、echarts、axios、markdown-it、html5-qrcode；devDependencies：vite、@vitejs/plugin-vue、typescript、vue-tsc）、frontend/index.html、frontend/tsconfig.json（strict: true），并执行 npm install
-- [ ] T002 [P] 配置 frontend/vite.config.ts（@ → src 别名；dev 代理 /api → http://localhost:8000）与 frontend/.env.example、frontend/.env.development（VITE_USE_MOCK=true、VITE_REAL_MODULES=空，含义见 research.md R1）
-- [ ] T003 [P] 创建 frontend/src/main.ts、frontend/src/App.vue、frontend/src/styles/（全局样式与主题变量）；main.ts 全量注册 ElementPlus（含样式）、Pinia、Router（research.md R7）
-- [ ] T004 [P] 定义契约类型 frontend/src/api/types.ts：UserSession{token,user{id,username,real_name,role}}、Role 枚举 `admin|engineer|viewer`、DeviceOption{device_id,name,last_ts}、LatestObservation（cems_raw 整行，condition_flag 枚举 `normal|startup|shutdown|fault`，标记位 0/1）、HistoryPoint、HistoryPage{items,total}、ApiError{detail}、Page{items,total,page,page_size}（字段约束逐条见 data-model.md）
+- [x] T001 初始化 frontend/ Vite+Vue3+TS 工程：创建 frontend/package.json（scripts: dev/build/preview，build=`vue-tsc --noEmit && vite build`；dependencies 按宪法 II 锁定清单：vue、vue-router、pinia、element-plus、echarts、axios、markdown-it、html5-qrcode；devDependencies：vite、@vitejs/plugin-vue、typescript、vue-tsc）、frontend/index.html、frontend/tsconfig.json（strict: true），并执行 npm install
+- [x] T002 [P] 配置 frontend/vite.config.ts（@ → src 别名；dev 代理 /api → http://localhost:8000）与 frontend/.env.example、frontend/.env.development（VITE_USE_MOCK=true、VITE_REAL_MODULES=空，含义见 research.md R1）
+- [x] T003 [P] 创建 frontend/src/main.ts、frontend/src/App.vue、frontend/src/styles/（全局样式与主题变量）；main.ts 全量注册 ElementPlus（含样式）、Pinia、Router（research.md R7）
+- [x] T004 [P] 定义契约类型 frontend/src/api/types.ts：UserSession{token,user{id,username,real_name,role}}、Role 枚举 `admin|engineer|viewer`、DeviceOption{device_id,name,last_ts}、LatestObservation（cems_raw 整行，condition_flag 枚举 `normal|startup|shutdown|fault`，标记位 0/1）、HistoryPoint、HistoryPage{items,total}、ApiError{detail}、Page{items,total,page,page_size}（字段约束逐条见 data-model.md）
 
 ---
 
@@ -39,10 +39,10 @@
 
 **⚠️ CRITICAL**: 本阶段完成前不得开始任何用户故事
 
-- [ ] T005 实现 frontend/src/utils/request.ts：axios 实例 baseURL=/api；请求拦截器加 `Authorization: Bearer <token>`；响应拦截器 401 → 清空会话并跳 `/login?redirect=当前路径`（会话清理用动态 import user store 避免循环依赖，接线在 T013 完成）；非 401 错误读取 body `{"detail"}` 用 ElMessage 可读提示；分页参数约定 page 默认 1、page_size 默认 20 最大 100
-- [ ] T006 [P] 实现 frontend/src/api/mock/index.ts：isMockEnabled(module) —— VITE_USE_MOCK=false 一律真实；true 时模块名在 VITE_REAL_MODULES（逗号分隔）中则真实，否则 mock（research.md R1）
-- [ ] T007 [P] 实现 frontend/src/utils/format.ts：ISO 8601（YYYY-MM-DDTHH:mm:ss）时间显示格式化、数值与单位格式化
-- [ ] T008 创建 frontend/src/router/routes.ts 与 frontend/src/router/index.ts：路由表为菜单/守卫单一数据源（meta: public/roles/title）；/login 为 public；九业务路由（/dashboard /alarms /predictions /workorders /devices /inspection /reports /assistant /admin/users）懒加载，/admin/users 配 roles:['admin']；router 实例预留全局守卫挂载点（登录守卫 T013、角色守卫 T015 补全）
+- [x] T005 实现 frontend/src/utils/request.ts：axios 实例 baseURL=/api；请求拦截器加 `Authorization: Bearer <token>`；响应拦截器 401 → 清空会话并跳 `/login?redirect=当前路径`（会话清理用动态 import user store 避免循环依赖，接线在 T013 完成）；非 401 错误读取 body `{"detail"}` 用 ElMessage 可读提示；分页参数约定 page 默认 1、page_size 默认 20 最大 100
+- [x] T006 [P] 实现 frontend/src/api/mock/index.ts：isMockEnabled(module) —— VITE_USE_MOCK=false 一律真实；true 时模块名在 VITE_REAL_MODULES（逗号分隔）中则真实，否则 mock（research.md R1）
+- [x] T007 [P] 实现 frontend/src/utils/format.ts：ISO 8601（YYYY-MM-DDTHH:mm:ss）时间显示格式化、数值与单位格式化
+- [x] T008 创建 frontend/src/router/routes.ts 与 frontend/src/router/index.ts：路由表为菜单/守卫单一数据源（meta: public/roles/title）；/login 为 public；九业务路由（/dashboard /alarms /predictions /workorders /devices /inspection /reports /assistant /admin/users）懒加载，/admin/users 配 roles:['admin']；router 实例预留全局守卫挂载点（登录守卫 T013、角色守卫 T015 补全）
 
 **Checkpoint**: 基础设施就绪，用户故事可开始
 
@@ -56,11 +56,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [P] [US1] 创建 frontend/src/api/mock/auth.json：4 个演示账号 admin/engineer1/engineer2/viewer，密码均 123456，real_name 分别为 系统管理员/张工程师/李工程师/王查看，role 对应 admin/engineer/engineer/viewer（data-model.md §3）
-- [ ] T010 [US1] 实现 frontend/src/api/auth.ts：login(username,password) 按 isMockEnabled('auth') 分流；真实 POST /api/auth/login；mock 命中返回同构 {token,user}，未命中抛 {detail:"用户名或密码错误"}（契约 contracts/auth.md，不区分用户不存在/密码错误）
-- [ ] T011 [US1] 实现 frontend/src/stores/user.ts：state {token,user}；localStorage 键 gm_session 持久化，store 初始化同步恢复；login 成功写入、logout 清空存储与状态（FR-002/FR-004）
-- [ ] T012 [US1] 实现 frontend/src/views/login/LoginView.vue：用户名/密码表单与校验；成功进入工作台或按 redirect 查询参数回跳（仅允许站内路径）；失败显示统一可读提示并停留；已登录访问 /login 直接进工作台
-- [ ] T013 [US1] 在 frontend/src/router/index.ts 补全登录守卫（未登录访问非 public → /login?redirect=fullPath），并完成 T005 的 401 会话清理接线：任何业务请求 401 → 清会话跳登录，无半登录态
+- [x] T009 [P] [US1] 创建 frontend/src/api/mock/auth.json：4 个演示账号 admin/engineer1/engineer2/viewer，密码均 123456，real_name 分别为 系统管理员/张工程师/李工程师/王查看，role 对应 admin/engineer/engineer/viewer（data-model.md §3）
+- [x] T010 [US1] 实现 frontend/src/api/auth.ts：login(username,password) 按 isMockEnabled('auth') 分流；真实 POST /api/auth/login；mock 命中返回同构 {token,user}，未命中抛 {detail:"用户名或密码错误"}（契约 contracts/auth.md，不区分用户不存在/密码错误）
+- [x] T011 [US1] 实现 frontend/src/stores/user.ts：state {token,user}；localStorage 键 gm_session 持久化，store 初始化同步恢复；login 成功写入、logout 清空存储与状态（FR-002/FR-004）
+- [x] T012 [US1] 实现 frontend/src/views/login/LoginView.vue：用户名/密码表单与校验；成功进入工作台或按 redirect 查询参数回跳（仅允许站内路径）；失败显示统一可读提示并停留；已登录访问 /login 直接进工作台
+- [x] T013 [US1] 在 frontend/src/router/index.ts 补全登录守卫（未登录访问非 public → /login?redirect=fullPath），并完成 T005 的 401 会话清理接线：任何业务请求 401 → 清会话跳登录，无半登录态
 
 **Checkpoint**: US1 可独立验收（SC-001/SC-002）——此时即为可演示 MVP
 
@@ -74,10 +74,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [P] [US2] 实现 frontend/src/utils/permission.ts：usePermission() 提供 canWrite（role!=='viewer'）、hasRole(...roles)、isAdmin（research.md R5）
-- [ ] T015 [US2] 在 frontend/src/router/index.ts 补全角色守卫：meta.roles 存在且不含当前角色 → 重定向 /dashboard；/admin/users 仅 admin 可达（FR-006）
-- [ ] T016 [US2] 实现 frontend/src/components/AppLayout.vue：左侧菜单由 routes 按当前角色过滤生成（单一数据源，research.md R4）+ 顶栏显示 real_name 与退出按钮（调 store.logout）+ 内容区 router-view
-- [ ] T017 [US2] 写入口显隐机制落地：AppLayout 与现有全部视图接入 usePermission，viewer 不渲染任何新建/编辑/删除/确认/审批入口（FR-007 数量为 0）；角色切换后菜单与写入口立即按新角色重算，无上一角色残留
+- [x] T014 [P] [US2] 实现 frontend/src/utils/permission.ts：usePermission() 提供 canWrite（role!=='viewer'）、hasRole(...roles)、isAdmin（research.md R5）
+- [x] T015 [US2] 在 frontend/src/router/index.ts 补全角色守卫：meta.roles 存在且不含当前角色 → 重定向 /dashboard；/admin/users 仅 admin 可达（FR-006）
+- [x] T016 [US2] 实现 frontend/src/components/AppLayout.vue：左侧菜单由 routes 按当前角色过滤生成（单一数据源，research.md R4）+ 顶栏显示 real_name 与退出按钮（调 store.logout）+ 内容区 router-view
+- [x] T017 [US2] 写入口显隐机制落地：AppLayout 与现有全部视图接入 usePermission，viewer 不渲染任何新建/编辑/删除/确认/审批入口（FR-007 数量为 0）；角色切换后菜单与写入口立即按新角色重算，无上一角色残留
 
 **Checkpoint**: US1+US2 可独立验收（SC-003）
 
@@ -91,14 +91,14 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [P] [US3] 实现 frontend/src/components/MetricCard.vue：props 名称/当前值/标准值/单位；当前值（折算 *_std）≥ 标准值（*_limit）时超标红色高亮（FR-010）
-- [ ] T019 [P] [US3] 实现 frontend/src/components/TrendChart.vue：echarts 按需引入（core+LineChart+Grid/Tooltip/Legend+CanvasRenderer）；props series/limits，标准值虚线；ResizeObserver 自适应；onBeforeUnmount dispose（research.md R6）
-- [ ] T020 [P] [US3] 实现 frontend/src/components/PageTable.vue：el-table + 统一分页封装（page 默认 1、page_size 默认 20 最大 100；FR-013 统一分页交互，端到端验证留待 003 告警）
-- [ ] T021 [P] [US3] 创建 frontend/src/views/placeholders/UnderConstruction.vue 及 8 个占位视图（alarms/predictions/workorders/devices/inspection/reports/assistant/admin）：显示页面标题+"建设中"说明，不渲染任何虚构业务数值（FR-009）
-- [ ] T022 [P] [US3] 创建 frontend/src/api/mock/data.json：devices（CEMS-01/CEMS-02）、latest（按 device_id 键控 cems_raw 整行）、history（每设备 24 个逐时点）；CEMS-01 含 pm_std>pm_limit 超标样本、CEMS-02 全正常；时间 ISO 8601；结构与 contracts/data.md 逐字段一致（data-model.md §4-6）
-- [ ] T023 [US3] 实现 frontend/src/api/data.ts：devices()、latest(deviceId, asOf?)、history(deviceId, start, end, interval) 按 isMockEnabled('data') 分流（契约 contracts/data.md；本期大屏用 interval=hour 近 24h）
-- [ ] T024 [US3] 实现 frontend/src/views/dashboard/DashboardView.vue：设备选择器 + 5 污染物 MetricCard（折算值对比标准值、超标高亮）+ TrendChart 24h 五污染物折线+标准值虚线；切换设备时指标卡与趋势图联动刷新（FR-010）
-- [ ] T025 [US3] 空白布局与可达性收尾：/login 与 /inspection 使用无侧边栏空白布局（FR-008）；逐一核对九业务路由可达、无死链，占位页标识正确
+- [x] T018 [P] [US3] 实现 frontend/src/components/MetricCard.vue：props 名称/当前值/标准值/单位；当前值（折算 *_std）≥ 标准值（*_limit）时超标红色高亮（FR-010）
+- [x] T019 [P] [US3] 实现 frontend/src/components/TrendChart.vue：echarts 按需引入（core+LineChart+Grid/Tooltip/Legend+CanvasRenderer）；props series/limits，标准值虚线；ResizeObserver 自适应；onBeforeUnmount dispose（research.md R6）
+- [x] T020 [P] [US3] 实现 frontend/src/components/PageTable.vue：el-table + 统一分页封装（page 默认 1、page_size 默认 20 最大 100；FR-013 统一分页交互，端到端验证留待 003 告警）
+- [x] T021 [P] [US3] 创建 frontend/src/views/placeholders/UnderConstruction.vue 及 8 个占位视图（alarms/predictions/workorders/devices/inspection/reports/assistant/admin）：显示页面标题+"建设中"说明，不渲染任何虚构业务数值（FR-009）
+- [x] T022 [P] [US3] 创建 frontend/src/api/mock/data.json：devices（CEMS-01/CEMS-02）、latest（按 device_id 键控 cems_raw 整行）、history（每设备 24 个逐时点）；CEMS-01 含 pm_std>pm_limit 超标样本、CEMS-02 全正常；时间 ISO 8601；结构与 contracts/data.md 逐字段一致（data-model.md §4-6）
+- [x] T023 [US3] 实现 frontend/src/api/data.ts：devices()、latest(deviceId, asOf?)、history(deviceId, start, end, interval) 按 isMockEnabled('data') 分流（契约 contracts/data.md；本期大屏用 interval=hour 近 24h）
+- [x] T024 [US3] 实现 frontend/src/views/dashboard/DashboardView.vue：设备选择器 + 5 污染物 MetricCard（折算值对比标准值、超标高亮）+ TrendChart 24h 五污染物折线+标准值虚线；切换设备时指标卡与趋势图联动刷新（FR-010）
+- [x] T025 [US3] 空白布局与可达性收尾：/login 与 /inspection 使用无侧边栏空白布局（FR-008）；逐一核对九业务路由可达、无死链，占位页标识正确
 
 **Checkpoint**: US1—US3 可独立验收（SC-004）
 
@@ -112,9 +112,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T026 [US4] 演示模式端到端核查与修正：后端停机 + VITE_USE_MOCK=true 走通"登录→导航→大屏骨架"全流程无报错无空白页；将 mock JSON 与 contracts/ 逐字段核对，不一致以契约为准修正 mock（不改页面适配错误结构）
-- [ ] T027 [US4] 单模块真实切换验证：VITE_REAL_MODULES=auth 指向 :8000 后端桩，登录走真实接口、大屏及其余模块仍用演示数据互不影响；真实模式下后端不可用时展示可读错误提示、页面不崩溃（FR-012/FR-013）
-- [ ] T028 [US4] 状态保持核查：演示模式下刷新页面会话与演示模式状态保持；同一浏览器切换不同角色账号菜单与写入口立即刷新无残留（Edge Cases）
+- [x] T026 [US4] 演示模式端到端核查与修正：后端停机 + VITE_USE_MOCK=true 走通"登录→导航→大屏骨架"全流程无报错无空白页；将 mock JSON 与 contracts/ 逐字段核对，不一致以契约为准修正 mock（不改页面适配错误结构）
+- [x] T027 [US4] 单模块真实切换验证：VITE_REAL_MODULES=auth 指向 :8000 后端桩，登录走真实接口、大屏及其余模块仍用演示数据互不影响；真实模式下后端不可用时展示可读错误提示、页面不崩溃（FR-012/FR-013）
+- [x] T028 [US4] 状态保持核查：演示模式下刷新页面会话与演示模式状态保持；同一浏览器切换不同角色账号菜单与写入口立即刷新无残留（Edge Cases）
 
 **Checkpoint**: 四个用户故事全部可独立验收（SC-005）
 
@@ -124,9 +124,9 @@
 
 **Purpose**: 跨故事收尾与总验收
 
-- [ ] T029 [P] 在 frontend/ 执行 npm run build（vue-tsc --noEmit && vite build）须一次通过；npm run preview 复跑完整演示流程，浏览器控制台报错数为 0（SC-006/FR-014）
-- [ ] T030 [P] 按 specs/001-frontend-foundation/quickstart.md 执行全部验证场景并逐条记录结果（SC-001…SC-006）
-- [ ] T031 更新根目录 README.md：前端启动说明（npm install → npm run dev）、演示账号表（admin/engineer1/engineer2/viewer，密码 123456）、演示模式与逐模块切换说明
+- [x] T029 [P] 在 frontend/ 执行 npm run build（vue-tsc --noEmit && vite build）须一次通过；npm run preview 复跑完整演示流程，浏览器控制台报错数为 0（SC-006/FR-014）
+- [x] T030 [P] 按 specs/001-frontend-foundation/quickstart.md 执行全部验证场景并逐条记录结果（SC-001…SC-006）
+- [x] T031 更新根目录 README.md：前端启动说明（npm install → npm run dev）、演示账号表（admin/engineer1/engineer2/viewer，密码 123456）、演示模式与逐模块切换说明
 
 ---
 
