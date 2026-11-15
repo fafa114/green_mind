@@ -280,3 +280,155 @@ export const USER_NAME: Record<number, string> = {
   3: '李工程师',
   4: '王查看',
 }
+
+/* ============================ 预测（005） ============================ */
+
+export interface PredictionHour {
+  ts: string
+  value: number
+  exceed_prob: number
+}
+
+/** 执行版 5.2 预测输出 */
+export interface PredictionResult {
+  hours: PredictionHour[]
+  drivers: string[]
+  confidence: number
+}
+
+export interface PredictionRecord {
+  id: number
+  device_id: string
+  pollutant: PollutantCode
+  base_ts: string
+  result: PredictionResult
+  created_at: string
+}
+
+/* ============================ 设备（006） ============================ */
+
+export type DeviceStatus = 'running' | 'stopped' | 'maintenance'
+
+export interface Device {
+  id: number
+  code: string
+  name: string
+  type: string
+  install_date: string
+  design_life_years: number
+  last_calibration_date: string
+  calibration_cycle_days: number
+  status: DeviceStatus
+  created_at: string
+}
+
+export type DeviceWithHealth = Device & { health_score: number | null }
+
+export interface HealthFactor {
+  name: string
+  impact: string
+}
+
+/** 执行版 5.3 健康度输出 */
+export interface HealthScore {
+  score: number
+  factors: HealthFactor[]
+  suggestion: string
+  scored_at: string
+}
+
+export const DEVICE_STATUS_LABEL: Record<DeviceStatus, string> = {
+  running: '运行',
+  stopped: '停运',
+  maintenance: '维护',
+}
+
+export const DEVICE_STATUS_COLOR: Record<DeviceStatus, string> = {
+  running: '#16a34a',
+  stopped: '#64748b',
+  maintenance: '#f59e0b',
+}
+
+/* ============================ 巡检（007） ============================ */
+
+export interface ChecklistItem {
+  item: string
+  ok: boolean
+  note: string
+}
+
+export interface Inspection {
+  id: number
+  device_id: string
+  inspector_id: number
+  checkin_time: string
+  checklist: ChecklistItem[]
+  photos: string[]
+  signature_path: string
+  abnormal_desc: string | null
+  workorder_id: number | null
+  created_at: string
+}
+
+export const INSPECTION_ITEMS = [
+  '燃烧系统',
+  '烟气净化',
+  'CEMS 分析仪',
+  '校准状态',
+  '数据上报',
+  '现场环境',
+]
+
+/* ============================ 助手（008） ============================ */
+
+export interface ChatSession {
+  id: number
+  title: string
+  created_at: string
+}
+
+export interface ChatMessage {
+  id: number
+  session_id: number
+  role: 'user' | 'assistant' | 'tool'
+  content: string
+  created_at: string
+}
+
+/* ============================ 报表 + 用户（009） ============================ */
+
+export interface PollutantStat {
+  max: number
+  avg: number
+  exceed_hours: number
+}
+
+export interface ReportStats {
+  pollutants: Record<PollutantCode, PollutantStat>
+  alarm_by_level: { yellow: number; orange: number; red: number }
+  workorder: { total: number; completed: number; on_time_rate: number }
+  inspection_count: number
+  avg_health: number
+}
+
+export interface Report {
+  id: number
+  period: string
+  stats: ReportStats
+  content_md: string
+  generated_at: string
+}
+
+export interface ReportListItem {
+  id: number
+  period: string
+  generated_at: string
+}
+
+export interface AdminUser {
+  id: number
+  username: string
+  real_name: string
+  role: Role
+  created_at: string
+}

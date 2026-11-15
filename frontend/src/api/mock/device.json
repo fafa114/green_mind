@@ -1,0 +1,115 @@
+{
+  "devices": [
+    {
+      "id": 1,
+      "code": "CEMS-01",
+      "name": "1#焚烧炉排放口 CEMS",
+      "type": "烟气在线监测",
+      "install_date": "2022-03-15",
+      "design_life_years": 10,
+      "last_calibration_date": "2026-04-29",
+      "calibration_cycle_days": 365,
+      "status": "running",
+      "created_at": "2022-03-15T08:00:00"
+    },
+    {
+      "id": 2,
+      "code": "CEMS-02",
+      "name": "2#焚烧炉排放口 CEMS",
+      "type": "烟气在线监测",
+      "install_date": "2022-06-20",
+      "design_life_years": 10,
+      "last_calibration_date": "2025-10-11",
+      "calibration_cycle_days": 365,
+      "status": "running",
+      "created_at": "2022-06-20T08:00:00"
+    },
+    {
+      "id": 3,
+      "code": "INCIN-01",
+      "name": "1#焚烧炉",
+      "type": "焚烧设备",
+      "install_date": "2021-11-01",
+      "design_life_years": 20,
+      "last_calibration_date": "2026-08-17",
+      "calibration_cycle_days": 180,
+      "status": "running",
+      "created_at": "2021-11-01T08:00:00"
+    },
+    {
+      "id": 4,
+      "code": "BAG-01",
+      "name": "1#布袋除尘器",
+      "type": "烟气净化",
+      "install_date": "2021-11-01",
+      "design_life_years": 15,
+      "last_calibration_date": "2026-10-16",
+      "calibration_cycle_days": 365,
+      "status": "maintenance",
+      "created_at": "2021-11-01T08:00:00"
+    }
+  ],
+  "health": {
+    "1": {
+      "score": 86,
+      "factors": [
+        {
+          "name": "通讯中断次数",
+          "impact": "近30天 0 次，影响小"
+        },
+        {
+          "name": "异常数据占比",
+          "impact": "超标/零值占比 2.1%，轻微"
+        },
+        {
+          "name": "告警次数",
+          "impact": "近30天 4 次，中等"
+        },
+        {
+          "name": "校准逾期",
+          "impact": "未逾期"
+        }
+      ],
+      "suggestion": "设备整体运行良好。建议关注颗粒物除尘器压差，按期校准 CEMS 分析仪，保持脱酸系统稳定。",
+      "scored_at": "2026-11-12T15:00:03"
+    },
+    "2": {
+      "score": 72,
+      "factors": [
+        {
+          "name": "通讯中断次数",
+          "impact": "近30天 1 次，轻微"
+        },
+        {
+          "name": "异常数据占比",
+          "impact": "占比 3.4%，中等"
+        },
+        {
+          "name": "告警次数",
+          "impact": "近30天 6 次，偏高"
+        },
+        {
+          "name": "校准逾期",
+          "impact": "已逾期 35 天，需尽快校准"
+        }
+      ],
+      "suggestion": "校准已逾期，建议优先安排 CEMS 校准；核查告警偏高的 NOₓ 与 CO 燃烧工况。",
+      "scored_at": "2026-11-10T15:00:03"
+    },
+    "3": {
+      "score": 91,
+      "factors": [
+        {
+          "name": "运行稳定性",
+          "impact": "炉温稳定，影响小"
+        },
+        {
+          "name": "告警次数",
+          "impact": "近30天 1 次，少"
+        }
+      ],
+      "suggestion": "焚烧炉运行状态优秀，保持当前燃烧控制策略。",
+      "scored_at": "2026-11-13T15:00:03"
+    }
+  }
+}
