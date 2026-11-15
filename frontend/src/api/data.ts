@@ -71,20 +71,6 @@ export async function fetchDevices(): Promise<DeviceOption[]> {
   return data
 }
 
-<<<<<<< HEAD
-export interface ReplayStatus {
-  device_id: string
-  source_start: string
-  source_end: string
-  cursor: string
-  speed: number
-  mode: 'historical_replay'
-}
-
-export function getReplay(deviceId: string): Promise<ReplayStatus> {
-  return http.get('/data/replay', { params: { device_id: deviceId } })
-}
-=======
 /** GET /api/data/latest（as_of 回放：mock 取最近历史点，真实透传参数） */
 export async function fetchLatest(deviceId: string, asOf?: string): Promise<LatestObservation> {
   if (isMockEnabled('data')) {
@@ -131,4 +117,3 @@ export async function fetchHistory(
   })
   return data
 }
->>>>>>> origin/master

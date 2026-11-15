@@ -22,3 +22,6 @@ backend/uploads/
 
 # 其他
 *.log
+
+# Vite 缓存
+frontend/.vite/

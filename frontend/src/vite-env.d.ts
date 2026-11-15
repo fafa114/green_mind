@@ -1,6 +1,4 @@
 /// <reference types="vite/client" />
-<<<<<<< HEAD
-=======
 
 interface ImportMetaEnv {
   readonly VITE_USE_MOCK: string
@@ -17,4 +15,3 @@ declare module '*.vue' {
   const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
   export default component
 }
->>>>>>> origin/master

@@ -156,20 +156,6 @@ function onCommand(cmd: string): void {
 </template>
 
 <style scoped>
-<<<<<<< HEAD
-.app-layout { height: 100%; }
-.full { height: 100%; }
-.aside { background: #1d2b36; display: flex; flex-direction: column; }
-.logo { color: #4cc2ff; font-size: 22px; font-weight: 700; padding: 18px 20px; letter-spacing: 1px; }
-.menu { border-right: none; flex: 1; }
-.header { background: #fff; border-bottom: 1px solid #e4e7ed; display: flex; align-items: center; justify-content: space-between; }
-.header-title { font-size: 16px; font-weight: 600; }
-.header-right { display: flex; align-items: center; gap: 12px; }
-.real-name { color: #606266; font-size: 14px; }
-.main { background: #f0f2f5; padding: 16px; min-height: 0; display: flex; flex-direction: column; }
-.main > :deep(.assistant-page) { flex: 1; }
-</style>
-=======
 .shell {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -470,4 +456,3 @@ function onCommand(cmd: string): void {
   }
 }
 </style>
->>>>>>> origin/master

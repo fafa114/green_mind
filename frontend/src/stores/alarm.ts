@@ -15,38 +15,6 @@ export const useAlarmStore = defineStore('alarm', () => {
   const version = ref(0)
   let unsub: (() => void) | null = null
 
-<<<<<<< HEAD
-export const useAlarmStore = defineStore('alarm', {
-  state: () => ({
-    banners: [] as (AlarmEvent & { key: number })[],
-    connected: false,
-  }),
-  actions: {
-    start() {
-      if (disconnect) return
-      disconnect = connectAlarmStream({
-        onAlarm: (event) => this.push(event),
-        onOpen: () => { this.connected = true },
-        onClose: () => { this.connected = false },
-      })
-    },
-    stop() {
-      disconnect?.()
-      disconnect = null
-      this.connected = false
-      this.banners = []
-    },
-    push(event: AlarmEvent) {
-      this.banners.unshift({ ...event, key: Date.now() + Math.random() })
-      if (this.banners.length > MAX_BANNERS) this.banners.length = MAX_BANNERS
-      const key = this.banners[0].key
-      setTimeout(() => {
-        this.banners = this.banners.filter((b) => b.key !== key)
-      }, BANNER_TTL)
-    },
-  },
-})
-=======
   function onEvent(ev: AlarmStreamEvent): void {
     banners.value = [...banners.value, ev].slice(-3)
     if (!liveAlarms.value.some((a) => a.id === ev.id)) {
@@ -88,4 +56,3 @@ export const useAlarmStore = defineStore('alarm', {
 
   return { banners, liveAlarms, connected, version, start, stop, dismissBanner }
 })
->>>>>>> origin/master

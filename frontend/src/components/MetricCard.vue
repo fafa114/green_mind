@@ -69,26 +69,6 @@ const overPct = computed(() => Math.max(0, Math.round((ratio.value - 1) * 100)))
   </div>
 </template>
 
-<<<<<<< HEAD
-<script setup lang="ts">
-import { computed } from 'vue'
-
-const props = defineProps<{
-  name: string
-  value?: number | null
-  limit?: number | null
-  unit?: string
-  digits?: number
-  active?: boolean
-}>()
-
-const displayValue = computed(() => (props.value === null || props.value === undefined) ? '--' : Number(props.value).toFixed(props.digits ?? 2))
-const limitText = computed(() => (props.limit === null || props.limit === undefined) ? '--' : `${Number(props.limit).toFixed(props.digits ?? 0)}${props.unit || ''}`)
-const isExceed = computed(() => props.active !== false && props.value != null && props.limit != null && props.value > props.limit)
-</script>
-
-=======
->>>>>>> origin/master
 <style scoped>
 .metric {
   position: relative;
