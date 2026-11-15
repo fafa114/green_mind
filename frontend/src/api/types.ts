@@ -123,3 +123,160 @@ export const CONDITION_LABEL: Record<ConditionFlag, string> = {
   shutdown: '停运',
   fault: '故障',
 }
+
+export const POLLUTANT_LABEL: Record<PollutantCode, string> = {
+  pm: '颗粒物',
+  so2: '二氧化硫',
+  nox: '氮氧化物',
+  co: '一氧化碳',
+  hcl: '氯化氢',
+}
+
+/* ============================ 告警（003 / 002 SSE） ============================ */
+
+export type AlarmLevel = 'yellow' | 'orange' | 'red'
+export type AlarmStatus = 'pending' | 'acked' | 'closed'
+
+export interface RootCause {
+  cause: string
+  confidence: number
+}
+
+/** 执行版 5.1 诊断输出 */
+export interface AlarmDiagnosis {
+  root_causes: RootCause[]
+  measures: string[]
+  estimated_recovery_minutes: number
+  summary: string
+}
+
+export interface Alarm {
+  id: number
+  device_id: string
+  ts: string
+  level: AlarmLevel
+  pollutant: PollutantCode
+  value: number
+  limit_val: number
+  reason: string
+  status: AlarmStatus
+  diagnosis: AlarmDiagnosis | null
+  workorder_id: number | null
+  created_at: string
+}
+
+/** SSE event:alarm 的 data 结构 */
+export interface AlarmStreamEvent {
+  id: number
+  level: AlarmLevel
+  device_id: string
+  pollutant: PollutantCode
+  value: number
+  summary: string
+}
+
+export interface AlarmFilters {
+  level?: AlarmLevel | ''
+  status?: AlarmStatus | ''
+  device_id?: string
+  start?: string
+  end?: string
+  page?: number
+  page_size?: number
+}
+
+export const ALARM_LEVEL_LABEL: Record<AlarmLevel, string> = {
+  yellow: '黄色',
+  orange: '橙色',
+  red: '红色',
+}
+
+export const ALARM_LEVEL_COLOR: Record<AlarmLevel, string> = {
+  yellow: '#f59e0b',
+  orange: '#fb923c',
+  red: '#ef4444',
+}
+
+export const ALARM_STATUS_LABEL: Record<AlarmStatus, string> = {
+  pending: '待处理',
+  acked: '已确认',
+  closed: '已关闭',
+}
+
+/* ============================ 工单（004） ============================ */
+
+export type WorkOrderPriority = 'low' | 'medium' | 'high' | 'urgent'
+export type WorkOrderStatus = 'pending' | 'processing' | 'accepting' | 'closed'
+
+export interface WorkOrder {
+  id: number
+  alarm_id: number | null
+  device_id: string
+  title: string
+  description: string
+  priority: WorkOrderPriority
+  status: WorkOrderStatus
+  assignee_id: number | null
+  sla_deadline: string
+  created_at: string
+  accepted_at: string | null
+  finished_at: string | null
+  closed_at: string | null
+  finish_note: string | null
+  accept_note: string | null
+}
+
+export interface EngineerLoad {
+  user_id: number
+  real_name: string
+  open_count: number
+}
+
+export interface WorkOrderStats {
+  by_status: Record<WorkOrderStatus, number>
+  engineer_load: EngineerLoad[]
+}
+
+export interface WorkOrderFilters {
+  status?: WorkOrderStatus | ''
+  assignee_id?: number | ''
+  device_id?: string
+  page?: number
+  page_size?: number
+}
+
+export const PRIORITY_LABEL: Record<WorkOrderPriority, string> = {
+  low: '低',
+  medium: '中',
+  high: '高',
+  urgent: '紧急',
+}
+
+export const PRIORITY_COLOR: Record<WorkOrderPriority, string> = {
+  low: '#64748b',
+  medium: '#0ea5e9',
+  high: '#fb923c',
+  urgent: '#ef4444',
+}
+
+export const WORKORDER_STATUS_LABEL: Record<WorkOrderStatus, string> = {
+  pending: '待接单',
+  processing: '处理中',
+  accepting: '待验收',
+  closed: '已关闭',
+}
+
+export const WORKORDER_STATUS_COLOR: Record<WorkOrderStatus, string> = {
+  pending: '#f59e0b',
+  processing: '#0ea5e9',
+  accepting: '#8b5cf6',
+  closed: '#16a34a',
+}
+
+/** 演示账号 ID → 姓名（与 mock/auth.json 一致，用于工单负责人显示） */
+export const USER_NAME: Record<number, string> = {
+  1: '系统管理员',
+  2: '张工程师',
+  3: '李工程师',
+  4: '王查看',
+}

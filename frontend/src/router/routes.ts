@@ -18,6 +18,8 @@ declare module 'vue-router' {
 const AppLayout = () => import('@/components/AppLayout.vue')
 const LoginView = () => import('@/views/login/LoginView.vue')
 const DashboardView = () => import('@/views/dashboard/DashboardView.vue')
+const AlarmsView = () => import('@/views/alarms/AlarmsView.vue')
+const WorkOrdersView = () => import('@/views/workorders/WorkOrdersView.vue')
 const UnderConstruction = () => import('@/views/placeholders/UnderConstruction.vue')
 
 /** 九个业务路由（监控大屏为本期骨架，其余为"建设中"占位） */
@@ -31,13 +33,8 @@ export const businessRoutes: RouteRecordRaw[] = [
   {
     path: 'alarms',
     name: 'alarms',
-    component: UnderConstruction,
-    meta: {
-      title: '告警中心',
-      icon: 'alarm',
-      summary: '规则告警列表与详情、AI 诊断、确认与自动工单联动。',
-      planned: ['级别/状态/设备/时间筛选', '诊断抽屉：根因 + 置信度 + 处置措施', 'SSE 实时告警横幅', '确认与查看工单'],
-    },
+    component: AlarmsView,
+    meta: { title: '告警中心', icon: 'alarm' },
   },
   {
     path: 'predictions',
@@ -53,13 +50,8 @@ export const businessRoutes: RouteRecordRaw[] = [
   {
     path: 'workorders',
     name: 'workorders',
-    component: UnderConstruction,
-    meta: {
-      title: '智能工单',
-      icon: 'workorder',
-      summary: '工单看板与状态机流转、SLA 倒计时、指派与验收。',
-      planned: ['四列看板 / 表格视图切换', 'SLA 倒计时（超时红色）', '接单 / 完成 / 审批', '工程师负载统计'],
-    },
+    component: WorkOrdersView,
+    meta: { title: '智能工单', icon: 'workorder' },
   },
   {
     path: 'devices',

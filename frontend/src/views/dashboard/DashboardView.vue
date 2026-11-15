@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import AppIcon from '@/components/AppIcon.vue'
 import MetricCard from '@/components/MetricCard.vue'
 import TrendChart from '@/components/TrendChart.vue'
+import AlarmBanner from '@/components/AlarmBanner.vue'
+import ReplayControls from '@/components/ReplayControls.vue'
 import { fetchDevices, fetchLatest, fetchHistory } from '@/api/data'
 import {
   POLLUTANTS,
@@ -32,11 +34,20 @@ const history = ref<HistoryPoint[]>([])
 const loading = ref(false)
 const error = ref('')
 
+// 回放状态
+const replayStart = ref('')
+const replayEnd = ref('')
+const replayCurrent = ref('')
+const playing = ref(false)
+const speed = ref(1)
+let playTimer: number | undefined
+let seekTimer: number | undefined
+
 const currentDevice = computed(() => devices.value.find((d) => d.device_id === deviceId.value))
 const conditionLabel = computed(() => (latest.value ? CONDITION_LABEL[latest.value.condition_flag] : '—'))
 const conditionTone = computed(() => latest.value?.condition_flag ?? 'normal')
 
-const cards = computed(() =>
+const pollutantCards = computed(() =>
   POLLUTANTS.map((m) => ({
     ...m,
     value: latest.value ? Number(latest.value[STD[m.code]]) : null,
@@ -48,11 +59,8 @@ const cards = computed(() =>
 const limits = computed<Record<PollutantCode, number>>(() => {
   const l = latest.value
   return {
-    pm: l?.pm_limit ?? 20,
-    so2: l?.so2_limit ?? 80,
-    nox: l?.nox_limit ?? 250,
-    co: l?.co_limit ?? 80,
-    hcl: l?.hcl_limit ?? 50,
+    pm: l?.pm_limit ?? 20, so2: l?.so2_limit ?? 80, nox: l?.nox_limit ?? 250,
+    co: l?.co_limit ?? 80, hcl: l?.hcl_limit ?? 50,
   }
 })
 
@@ -60,19 +68,6 @@ const exceedCount = computed(() => {
   const l = latest.value
   if (!l) return 0
   return POLLUTANTS.filter((m) => Number(l[STD[m.code]]) >= Number(l[LIMIT[m.code]])).length
-})
-
-const params = computed(() => {
-  const l = latest.value
-  return [
-    { label: '炉温', value: l?.furnace_temp ?? null, unit: '℃' },
-    { label: '烟气流量', value: l?.flow ?? null, unit: 'm³/h' },
-    { label: '氧含量', value: l?.o2 ?? null, unit: '%' },
-    { label: '烟气温度', value: l?.flue_temp ?? null, unit: '℃' },
-    { label: '烟气流速', value: l?.flue_velocity ?? null, unit: 'm/s' },
-    { label: '烟气湿度', value: l?.flue_humidity ?? null, unit: '%' },
-    { label: '烟气压力', value: l?.flue_pressure ?? null, unit: 'Pa' },
-  ]
 })
 
 const qualityChips = computed(() => {
@@ -86,30 +81,96 @@ const qualityChips = computed(() => {
   ]
 })
 
+const flueParams = computed(() => {
+  const l = latest.value
+  return [
+    { label: '氧含量', value: l?.o2 ?? null, unit: '%' },
+    { label: '烟气温度', value: l?.flue_temp ?? null, unit: '℃' },
+    { label: '烟气流速', value: l?.flue_velocity ?? null, unit: 'm/s' },
+    { label: '烟气湿度', value: l?.flue_humidity ?? null, unit: '%' },
+    { label: '烟气压力', value: l?.flue_pressure ?? null, unit: 'Pa' },
+  ]
+})
+
+function scheduleLatest(asOf: string): void {
+  if (seekTimer !== undefined) window.clearTimeout(seekTimer)
+  seekTimer = window.setTimeout(async () => {
+    if (!deviceId.value) return
+    try {
+      latest.value = await fetchLatest(deviceId.value, asOf)
+    } catch {
+      // 回放取数失败保留上一帧，不崩溃
+    }
+  }, 140)
+}
+
+function onSeek(iso: string): void {
+  replayCurrent.value = iso
+  scheduleLatest(iso)
+}
+
+function stopPlay(): void {
+  if (playTimer !== undefined) {
+    window.clearInterval(playTimer)
+    playTimer = undefined
+  }
+}
+
+function startPlay(): void {
+  stopPlay()
+  // 若停在末尾，先回到起点再播放，避免一开始就越界停止
+  if (new Date(replayCurrent.value).getTime() >= new Date(replayEnd.value).getTime()) {
+    replayCurrent.value = replayStart.value
+    scheduleLatest(replayStart.value)
+  }
+  playTimer = window.setInterval(() => {
+    const endMs = new Date(replayEnd.value).getTime()
+    const next = new Date(replayCurrent.value).getTime() + speed.value * 60000
+    if (next >= endMs) {
+      replayCurrent.value = replayEnd.value
+      playing.value = false
+      scheduleLatest(replayEnd.value)
+      return
+    }
+    const iso = toISO8601(new Date(next))
+    replayCurrent.value = iso
+    scheduleLatest(iso)
+  }, 1000)
+}
+
+watch(playing, (v) => {
+  if (v) startPlay()
+  else stopPlay()
+})
+watch(speed, () => {
+  if (playing.value) startPlay()
+})
+
 async function loadDevices(): Promise<void> {
   try {
     devices.value = await fetchDevices()
-    if (!deviceId.value && devices.value.length > 0) {
-      deviceId.value = devices.value[0].device_id
-    }
+    if (!deviceId.value && devices.value.length > 0) deviceId.value = devices.value[0].device_id
   } catch (e) {
     error.value = (e as { response?: { data?: { detail?: string } } }).response?.data?.detail || '设备列表加载失败'
   }
 }
 
-async function loadData(): Promise<void> {
+async function loadBase(): Promise<void> {
   if (!deviceId.value) return
   loading.value = true
   error.value = ''
+  playing.value = false
   try {
     const end = new Date()
     const start = new Date(end.getTime() - 24 * 3600 * 1000)
-    const [l, h] = await Promise.all([
-      fetchLatest(deviceId.value),
-      fetchHistory(deviceId.value, toISO8601(start), toISO8601(end), 'hour'),
-    ])
-    latest.value = l
+    const h = await fetchHistory(deviceId.value, toISO8601(start), toISO8601(end), 'hour')
     history.value = h.items
+    if (h.items.length > 0) {
+      replayStart.value = h.items[0].ts
+      replayEnd.value = h.items[h.items.length - 1].ts
+      replayCurrent.value = replayEnd.value
+    }
+    latest.value = await fetchLatest(deviceId.value)
   } catch (e) {
     error.value = (e as { response?: { data?: { detail?: string } } }).response?.data?.detail || '数据加载失败，请稍后重试'
     latest.value = null
@@ -120,24 +181,31 @@ async function loadData(): Promise<void> {
 }
 
 async function refresh(): Promise<void> {
-  await loadData()
+  await loadBase()
   if (!error.value) ElMessage.success('数据已刷新')
 }
 
 watch(deviceId, () => {
-  void loadData()
+  void loadBase()
 })
 
 onMounted(() => {
   void loadDevices()
 })
+
+onBeforeUnmount(() => {
+  stopPlay()
+  if (seekTimer !== undefined) window.clearTimeout(seekTimer)
+})
 </script>
 
 <template>
   <div class="dash">
+    <AlarmBanner />
+
     <header class="dash-head gm-fade-up">
       <div class="head-title">
-        <p class="eyebrow">监控大屏 · 骨架预览</p>
+        <p class="eyebrow">监控大屏 · 历史回放</p>
         <h1>排放监控</h1>
       </div>
       <div class="head-tools">
@@ -145,17 +213,28 @@ onMounted(() => {
           <el-option v-for="d in devices" :key="d.device_id" :label="`${d.device_id} · ${d.name}`" :value="d.device_id" />
         </el-select>
         <el-button size="large" class="refresh-btn" :loading="loading" @click="refresh">
-          <AppIcon v-if="!loading" name="refresh" :size="17" />
-          <span style="margin-left: 6px">刷新</span>
+          <AppIcon v-if="!loading" name="refresh" :size="17" /><span style="margin-left: 6px">刷新</span>
         </el-button>
       </div>
     </header>
 
     <el-alert v-if="error" :title="error" type="error" show-icon class="dash-err">
-      <el-button size="small" type="primary" plain @click="loadData">重试</el-button>
+      <el-button size="small" type="primary" plain @click="loadBase">重试</el-button>
     </el-alert>
 
-    <!-- 概览条 -->
+    <ReplayControls
+      v-if="replayStart && replayEnd"
+      :start="replayStart"
+      :end="replayEnd"
+      :current="replayCurrent"
+      :playing="playing"
+      :speed="speed"
+      class="gm-fade-up"
+      @update:current="onSeek"
+      @update:playing="playing = $event"
+      @update:speed="speed = $event"
+    />
+
     <section v-loading="loading && !latest" class="overview gm-surface gm-fade-up">
       <div class="ov-device">
         <span class="ov-ico"><AppIcon name="device" :size="22" /></span>
@@ -178,8 +257,8 @@ onMounted(() => {
           <span class="ov-lbl">趋势样本</span>
         </div>
         <div class="ov-stat">
-          <span class="ov-num gm-num">1h</span>
-          <span class="ov-lbl">聚合粒度</span>
+          <span class="ov-num gm-num">{{ speed }}×</span>
+          <span class="ov-lbl">回放倍速</span>
         </div>
       </div>
     </section>
@@ -188,7 +267,7 @@ onMounted(() => {
       <div class="dash-main">
         <section class="cards">
           <MetricCard
-            v-for="c in cards"
+            v-for="c in pollutantCards"
             :key="c.code"
             :label="c.label"
             :formula="c.formula"
@@ -198,25 +277,43 @@ onMounted(() => {
             :unit="c.unit"
             :color="c.color"
           />
+          <MetricCard
+            label="炉温"
+            formula="T"
+            :value="latest?.furnace_temp ?? null"
+            unit="℃"
+            color="#f59e0b"
+            :reference="900"
+            reference-label="额定"
+          />
+          <MetricCard
+            label="烟气流量"
+            formula="Q"
+            :value="latest?.flow ?? null"
+            unit="m³/h"
+            color="#0ea5e9"
+            :reference="32000"
+            reference-label="额定"
+          />
         </section>
 
         <section class="trend gm-surface gm-fade-up">
           <div class="panel-head">
             <div>
               <h2>24 小时趋势</h2>
-              <p>折算浓度对比标准值（虚线）</p>
+              <p>五污染物折算浓度 + 标准虚线 · 炉温/流量双轴</p>
             </div>
             <span class="panel-tag">interval = hour</span>
           </div>
-          <TrendChart :points="history" :limits="limits" :height="330" />
+          <TrendChart :series="history" :limits="limits" :height="360" :show-params="true" />
         </section>
       </div>
 
       <aside class="dash-side">
         <section class="panel gm-surface gm-fade-up">
-          <div class="panel-head"><h2>工况参数</h2></div>
+          <div class="panel-head"><h2>烟气参数</h2></div>
           <ul class="params">
-            <li v-for="row in params" :key="row.label">
+            <li v-for="row in flueParams" :key="row.label">
               <span class="p-lbl">{{ row.label }}</span>
               <span class="p-val gm-num">{{ formatNumber(row.value) }}<small>{{ row.unit }}</small></span>
             </li>
@@ -231,22 +328,17 @@ onMounted(() => {
               {{ chip.label }}
             </span>
           </div>
-          <p class="src-note">来源标记原样保留；超标为运维提示，非监管合规判定。</p>
+          <p class="src-note">来源标记原样保留；超标为运维提示，非监管合规判定。回放保留原始采样时间。</p>
         </section>
       </aside>
     </div>
-
-    <p class="scope-note gm-fade-up">
-      <AppIcon name="spark" :size="14" />
-      骨架预览 · 时间回放滑块与 SSE 实时告警横幅将在 002 监控大屏 feature 交付，当前为演示数据。
-    </p>
   </div>
 </template>
 
 <style scoped>
 .dash {
   display: grid;
-  gap: 20px;
+  gap: 18px;
 }
 .dash-head {
   display: flex;
@@ -289,8 +381,6 @@ onMounted(() => {
 .dash-err {
   border-radius: 12px;
 }
-
-/* 概览条 */
 .overview {
   display: flex;
   align-items: center;
@@ -362,22 +452,20 @@ onMounted(() => {
   color: var(--gm-ink-faint);
   margin-top: 2px;
 }
-
-/* 主网格 */
 .dash-grid {
   display: grid;
   grid-template-columns: minmax(0, 2.1fr) minmax(280px, 1fr);
-  gap: 20px;
+  gap: 18px;
   align-items: start;
 }
 .dash-main {
   display: grid;
-  gap: 20px;
+  gap: 18px;
   min-width: 0;
 }
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
   gap: 14px;
 }
 .trend {
@@ -410,11 +498,9 @@ onMounted(() => {
   border-radius: 999px;
   white-space: nowrap;
 }
-
-/* 侧栏面板 */
 .dash-side {
   display: grid;
-  gap: 20px;
+  gap: 18px;
 }
 .panel {
   padding: 20px 22px;
@@ -474,18 +560,6 @@ onMounted(() => {
   line-height: 1.5;
   color: var(--gm-ink-faint);
 }
-.scope-note {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 12.5px;
-  color: var(--gm-ink-faint);
-}
-.scope-note .gm-icon {
-  color: var(--gm-primary-bright);
-}
-
 @media (max-width: 1100px) {
   .dash-grid {
     grid-template-columns: 1fr;

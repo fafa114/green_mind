@@ -1,18 +1,28 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import AppIcon from '@/components/AppIcon.vue'
 import { businessRoutes } from '@/router/routes'
 import { useUserStore } from '@/stores/user'
+import { useAlarmStore } from '@/stores/alarm'
 import { isDemoMode } from '@/api/mock'
 import { ROLE_LABEL } from '@/api/types'
 
 const route = useRoute()
 const router = useRouter()
 const user = useUserStore()
+const alarmStore = useAlarmStore()
 const demoMode = isDemoMode()
 const mobileOpen = ref(false)
+
+// 全局单一 SSE 订阅：登录后启动，离开应用壳/退出时停止
+onMounted(() => {
+  alarmStore.start()
+})
+onBeforeUnmount(() => {
+  alarmStore.stop()
+})
 
 const isBlank = computed(() => Boolean(route.meta.blank))
 
@@ -41,6 +51,7 @@ function isActive(path: string): boolean {
 
 function onCommand(cmd: string): void {
   if (cmd === 'logout') {
+    alarmStore.stop()
     user.logout()
     ElMessage.success('已退出登录')
     router.replace('/login')

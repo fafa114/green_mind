@@ -8,20 +8,24 @@ const props = withDefaults(
     label: string
     formula: string
     value: number | null
-    limit: number | null
-    measured?: number | null
     unit: string
     color: string
+    limit?: number | null
+    measured?: number | null
+    reference?: number | null
+    referenceLabel?: string
   }>(),
-  { measured: null },
+  { limit: null, measured: null, reference: null, referenceLabel: '参考' },
 )
 
-const exceed = computed(
-  () => props.value != null && props.limit != null && props.limit > 0 && props.value >= props.limit,
-)
-const ratio = computed(() =>
-  props.value != null && props.limit != null && props.limit > 0 ? props.value / props.limit : 0,
-)
+const hasLimit = computed(() => props.limit != null && props.limit > 0)
+const exceed = computed(() => hasLimit.value && props.value != null && props.value >= props.limit!)
+const ratio = computed(() => {
+  if (props.value == null) return 0
+  if (hasLimit.value) return props.value / props.limit!
+  if (props.reference != null && props.reference > 0) return props.value / props.reference
+  return 0.5
+})
 const barWidth = computed(() => Math.min(ratio.value, 1) * 100)
 const overPct = computed(() => Math.max(0, Math.round((ratio.value - 1) * 100)))
 </script>
@@ -32,9 +36,13 @@ const overPct = computed(() => Math.max(0, Math.round((ratio.value - 1) * 100)))
     <div class="m-head">
       <span class="formula">{{ formula }}</span>
       <span class="m-label">{{ label }}</span>
-      <span class="status" :class="{ ok: !exceed }">
+      <span v-if="hasLimit" class="status" :class="{ ok: !exceed }">
         <AppIcon :name="exceed ? 'alert' : 'check'" :size="13" :stroke-width="2.4" />
         {{ exceed ? '超标' : '正常' }}
+      </span>
+      <span v-else class="status run">
+        <AppIcon name="gauge" :size="13" :stroke-width="2.4" />
+        运行
       </span>
     </div>
 
@@ -45,13 +53,18 @@ const overPct = computed(() => Math.max(0, Math.round((ratio.value - 1) * 100)))
 
     <div class="m-bar">
       <span class="m-bar-fill" :style="{ width: barWidth + '%' }"></span>
-      <span class="m-bar-limit"></span>
+      <span v-if="hasLimit" class="m-bar-limit"></span>
     </div>
 
     <div class="m-meta gm-num">
-      <span>标准 <b>{{ formatNumber(limit) }}</b></span>
-      <span>实测 <b>{{ formatNumber(measured) }}</b></span>
-      <span v-if="exceed" class="over">超 {{ overPct }}%</span>
+      <template v-if="hasLimit">
+        <span>标准 <b>{{ formatNumber(limit) }}</b></span>
+        <span>实测 <b>{{ formatNumber(measured) }}</b></span>
+        <span v-if="exceed" class="over">超 {{ overPct }}%</span>
+      </template>
+      <template v-else>
+        <span>{{ referenceLabel }} <b>{{ formatNumber(reference) }}</b></span>
+      </template>
     </div>
   </div>
 </template>
@@ -126,6 +139,10 @@ const overPct = computed(() => Math.max(0, Math.round((ratio.value - 1) * 100)))
   color: var(--gm-green);
   background: rgba(22, 163, 74, 0.12);
 }
+.status.run {
+  color: var(--gm-primary);
+  background: var(--gm-primary-soft);
+}
 .m-value {
   display: flex;
   align-items: baseline;
@@ -133,7 +150,7 @@ const overPct = computed(() => Math.max(0, Math.round((ratio.value - 1) * 100)))
   margin-bottom: 12px;
 }
 .m-value strong {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 800;
   line-height: 1;
   color: var(--gm-ink);

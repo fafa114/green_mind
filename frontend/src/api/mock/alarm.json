@@ -1,0 +1,270 @@
+{
+  "alarms": [
+    {
+      "id": 1,
+      "device_id": "CEMS-01",
+      "ts": "2026-11-15T13:13:12",
+      "level": "red",
+      "pollutant": "pm",
+      "value": 28.6,
+      "limit_val": 20,
+      "reason": "颗粒物折算浓度 28.6 ≥ 1.5×标准值 20",
+      "status": "pending",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "布袋除尘器破袋或清灰异常",
+            "confidence": 0.82
+          },
+          {
+            "cause": "烟气流量骤增导致携带粉尘",
+            "confidence": 0.46
+          },
+          {
+            "cause": "CEMS 采样管路积灰",
+            "confidence": 0.31
+          }
+        ],
+        "measures": [
+          "检查除尘器压差与破袋检测",
+          "核对清灰周期与喷吹压力",
+          "比对流量与粉尘浓度相关性"
+        ],
+        "estimated_recovery_minutes": 45,
+        "summary": "颗粒物折算浓度严重超标，优先排查除尘系统；建议立即检查布袋除尘器压差与清灰工况。"
+      },
+      "workorder_id": 1,
+      "created_at": "2026-11-15T13:13:12"
+    },
+    {
+      "id": 2,
+      "device_id": "CEMS-01",
+      "ts": "2026-11-15T12:13:12",
+      "level": "orange",
+      "pollutant": "so2",
+      "value": 86,
+      "limit_val": 80,
+      "reason": "SO₂折算浓度 86.0 ≥ 标准值 80",
+      "status": "pending",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "脱硫浆液 pH 偏低",
+            "confidence": 0.74
+          },
+          {
+            "cause": "石灰石浆液供给不足",
+            "confidence": 0.52
+          }
+        ],
+        "measures": [
+          "检查脱硫塔 pH 计与浆液密度",
+          "补充石灰石浆液并校准 pH"
+        ],
+        "estimated_recovery_minutes": 60,
+        "summary": "SO₂轻度超标，疑似脱硫效率下降，建议核查浆液 pH 与供给量。"
+      },
+      "workorder_id": 2,
+      "created_at": "2026-11-15T12:13:12"
+    },
+    {
+      "id": 3,
+      "device_id": "CEMS-02",
+      "ts": "2026-11-15T13:43:12",
+      "level": "yellow",
+      "pollutant": "nox",
+      "value": 205,
+      "limit_val": 250,
+      "reason": "NOₓ折算浓度 205.0 ≥ 0.8×标准值 250",
+      "status": "pending",
+      "diagnosis": null,
+      "workorder_id": null,
+      "created_at": "2026-11-15T13:43:12"
+    },
+    {
+      "id": 4,
+      "device_id": "CEMS-02",
+      "ts": "2026-11-15T09:13:12",
+      "level": "orange",
+      "pollutant": "co",
+      "value": 84,
+      "limit_val": 80,
+      "reason": "CO 折算浓度 84.0 ≥ 标准值 80",
+      "status": "acked",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "燃烧配风不足",
+            "confidence": 0.68
+          },
+          {
+            "cause": "炉膛温度偏低导致燃烧不完全",
+            "confidence": 0.44
+          }
+        ],
+        "measures": [
+          "优化一二次风配比",
+          "检查给料速率与炉温"
+        ],
+        "estimated_recovery_minutes": 30,
+        "summary": "CO 轻度超标，疑似燃烧不完全，已确认并调整配风。"
+      },
+      "workorder_id": 3,
+      "created_at": "2026-11-15T09:13:12"
+    },
+    {
+      "id": 5,
+      "device_id": "CEMS-01",
+      "ts": "2026-11-15T06:13:12",
+      "level": "yellow",
+      "pollutant": "hcl",
+      "value": 42,
+      "limit_val": 50,
+      "reason": "HCl 折算浓度 42.0 ≥ 0.8×标准值 50",
+      "status": "acked",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "脱酸剂喷射量偏低",
+            "confidence": 0.6
+          }
+        ],
+        "measures": [
+          "检查脱酸剂喷射与雾化效果"
+        ],
+        "estimated_recovery_minutes": 20,
+        "summary": "HCl 接近限值，已确认并关注脱酸系统。"
+      },
+      "workorder_id": null,
+      "created_at": "2026-11-15T06:13:12"
+    },
+    {
+      "id": 6,
+      "device_id": "CEMS-01",
+      "ts": "2026-11-14T12:13:12",
+      "level": "red",
+      "pollutant": "nox",
+      "value": 392,
+      "limit_val": 250,
+      "reason": "NOₓ折算浓度 392.0 ≥ 1.5×标准值 250",
+      "status": "closed",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "SNCR 喷氨量不足",
+            "confidence": 0.79
+          },
+          {
+            "cause": "氨水浓度偏低",
+            "confidence": 0.4
+          }
+        ],
+        "measures": [
+          "校准 SNCR 喷氨流量",
+          "检测氨水浓度并补充"
+        ],
+        "estimated_recovery_minutes": 50,
+        "summary": "NOₓ严重超标，已处理并验收关闭。"
+      },
+      "workorder_id": 4,
+      "created_at": "2026-11-14T12:13:12"
+    },
+    {
+      "id": 7,
+      "device_id": "CEMS-02",
+      "ts": "2026-11-15T13:25:12",
+      "level": "orange",
+      "pollutant": "pm",
+      "value": 21.4,
+      "limit_val": 20,
+      "reason": "颗粒物折算浓度 21.4 ≥ 标准值 20",
+      "status": "pending",
+      "diagnosis": null,
+      "workorder_id": null,
+      "created_at": "2026-11-15T13:25:12"
+    },
+    {
+      "id": 8,
+      "device_id": "CEMS-02",
+      "ts": "2026-11-14T08:13:12",
+      "level": "yellow",
+      "pollutant": "so2",
+      "value": 66,
+      "limit_val": 80,
+      "reason": "SO₂折算浓度 66.0 ≥ 0.8×标准值 80",
+      "status": "closed",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "工况波动引起瞬时升高",
+            "confidence": 0.5
+          }
+        ],
+        "measures": [
+          "持续观察，无需立即处置"
+        ],
+        "estimated_recovery_minutes": 0,
+        "summary": "SO₂瞬时接近限值，已观察确认恢复正常。"
+      },
+      "workorder_id": null,
+      "created_at": "2026-11-14T08:13:12"
+    },
+    {
+      "id": 9,
+      "device_id": "CEMS-01",
+      "ts": "2026-11-15T12:43:12",
+      "level": "red",
+      "pollutant": "hcl",
+      "value": 78,
+      "limit_val": 50,
+      "reason": "HCl 折算浓度 78.0 ≥ 1.5×标准值 50",
+      "status": "pending",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "脱酸系统故障",
+            "confidence": 0.85
+          },
+          {
+            "cause": "垃圾氯含量骤增",
+            "confidence": 0.42
+          }
+        ],
+        "measures": [
+          "紧急检查脱酸塔与喷射系统",
+          "追溯入炉垃圾成分"
+        ],
+        "estimated_recovery_minutes": 40,
+        "summary": "HCl 严重超标，脱酸系统疑似故障，需紧急处置。"
+      },
+      "workorder_id": 5,
+      "created_at": "2026-11-15T12:43:12"
+    },
+    {
+      "id": 10,
+      "device_id": "CEMS-02",
+      "ts": "2026-11-15T02:13:12",
+      "level": "orange",
+      "pollutant": "nox",
+      "value": 262,
+      "limit_val": 250,
+      "reason": "NOₓ折算浓度 262.0 ≥ 标准值 250",
+      "status": "acked",
+      "diagnosis": {
+        "root_causes": [
+          {
+            "cause": "炉温偏高促进热力型 NOₓ",
+            "confidence": 0.63
+          }
+        ],
+        "measures": [
+          "优化燃烧温度控制"
+        ],
+        "estimated_recovery_minutes": 35,
+        "summary": "NOₓ轻度超标，已确认并调整燃烧温度。"
+      },
+      "workorder_id": null,
+      "created_at": "2026-11-15T02:13:12"
+    }
+  ]
+}

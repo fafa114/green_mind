@@ -16,6 +16,7 @@ const emit = defineEmits<{
   (e: 'update:page', value: number): void
   (e: 'update:pageSize', value: number): void
   (e: 'change', payload: { page: number; pageSize: number }): void
+  (e: 'row-click', row: T): void
 }>()
 
 function onCurrent(p: number): void {
@@ -31,7 +32,7 @@ function onSize(s: number): void {
 
 <template>
   <div class="page-table">
-    <el-table v-loading="loading" :data="data" stripe style="width: 100%">
+    <el-table v-loading="loading" :data="data" stripe style="width: 100%" @row-click="(row: T) => emit('row-click', row)">
       <slot />
       <template #empty>
         <div class="empty">
