@@ -1,42 +1,49 @@
-export function fmtTime(iso?: string | null): string {
-  if (!iso) return '--'
-  return iso.replace('T', ' ').slice(0, 19)
+// 时间统一 ISO 8601（YYYY-MM-DDTHH:mm:ss）；显示层格式化。
+
+function pad(n: number): string {
+  return String(n).padStart(2, '0')
 }
 
-export function fmtDate(iso?: string | null): string {
-  if (!iso) return '--'
-  return iso.slice(0, 10)
+function toDate(iso?: string | null): Date | null {
+  if (!iso) return null
+  const d = new Date(iso)
+  return Number.isNaN(d.getTime()) ? null : d
 }
 
-export function levelName(level: string): string {
-  return { yellow: '黄色', orange: '橙色', red: '红色' }[level] || level
+/** 完整日期时间：2026-11-14 08:00:00 */
+export function formatDateTime(iso?: string | null): string {
+  const d = toDate(iso)
+  if (!d) return '--'
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
 }
 
-export function alarmStatusName(status: string): string {
-  return { pending: '待确认', acked: '已确认', closed: '已关闭' }[status] || status
+/** 月日时分：11-14 08:00 */
+export function formatShort(iso?: string | null): string {
+  const d = toDate(iso)
+  if (!d) return '--'
+  return `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-export function woStatusName(status: string): string {
-  return { pending: '待接单', processing: '处理中', accepting: '待验收', closed: '已关闭' }[status] || status
+/** 仅时分：08:00（趋势图横轴） */
+export function formatClock(iso?: string | null): string {
+  const d = toDate(iso)
+  if (!d) return '--'
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-export function priorityName(priority: string): string {
-  return { low: '低', medium: '中', high: '高', urgent: '紧急' }[priority] || priority
+/** 数值格式化；null/NaN 显示占位符，不虚构 0 */
+export function formatNumber(value?: number | null, digits = 1): string {
+  if (value == null || Number.isNaN(value)) return '--'
+  return value.toFixed(digits)
 }
 
-export function conditionName(flag?: string): string {
-  return { normal: '正常', startup: '启动', shutdown: '停运', fault: '故障' }[flag || ''] || flag || '--'
+/** 百分比（0—1 → 0%—100%） */
+export function formatPercent(ratio?: number | null, digits = 0): string {
+  if (ratio == null || Number.isNaN(ratio)) return '--'
+  return `${(ratio * 100).toFixed(digits)}%`
 }
 
-export function roleName(role: string): string {
-  return { admin: '管理员', engineer: '工程师', viewer: '查看者' }[role] || role
-}
-
-export function pollutantName(key: string): string {
-  return { pm: '颗粒物', so2: 'SO₂', nox: 'NOₓ', co: 'CO', hcl: 'HCl' }[key] || key
-}
-
-export function formatNumber(v?: number | null, digits = 2): string {
-  if (v === null || v === undefined) return '--'
-  return Number(v).toFixed(digits)
+/** Date → ISO 8601 本地时间（YYYY-MM-DDTHH:mm:ss），用于接口时间参数 */
+export function toISO8601(d: Date): string {
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
 }
