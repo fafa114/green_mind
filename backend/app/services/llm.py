@@ -1,73 +1,129 @@
-"""Shared DeepSeek-compatible chat client. The API key is read from environment only."""
 import asyncio
 import json
-import os
-from typing import Any
+import time
+from typing import Any, AsyncIterator, Dict, List, Optional, Union
+
 import httpx
+
+from app.config import settings
+from app.db import SessionLocal
+from app.models import OperationLog
+
 
 class LLMError(RuntimeError):
     pass
 
-class LLMClient:
-    def __init__(self, api_key: str | None = None, base_url: str | None = None,
-                 model: str | None = None, fallback_model: str | None = None,
-                 transport: httpx.AsyncBaseTransport | None = None):
-        self.api_key = api_key or os.getenv('LLM_API_KEY', '')
-        self.base_url = (base_url or os.getenv('LLM_BASE_URL', 'https://api.deepseek.com')).rstrip('/')
-        self.model = model or os.getenv('LLM_MODEL', 'deepseek-chat')
-        self.fallback_model = fallback_model or os.getenv('LLM_FALLBACK_MODEL', '')
-        self.transport = transport
-        if not self.api_key:
-            raise LLMError('LLM_API_KEY is required')
 
-    async def chat(self, messages: list[dict[str, Any]], tools: list[dict] | None = None,
-                   stream: bool = False, json_mode: bool = False) -> dict | Any:
-        if stream:
-            raise LLMError('Use stream_chat for streaming responses')
-        payload = {'model': self.model, 'messages': messages, 'stream': False}
-        if tools is not None:
-            payload['tools'] = tools
-        if json_mode:
-            payload['response_format'] = {'type': 'json_object'}
-        async with httpx.AsyncClient(timeout=60, transport=self.transport) as client:
-            models = [self.model] + ([self.fallback_model] if self.fallback_model and self.fallback_model != self.model else [])
-            for model in models:
-                payload['model'] = model
-                for attempt in range(3):
-                    try:
-                        response = await client.post(self.base_url + '/v1/chat/completions', json=payload,
-                            headers={'Authorization': f'Bearer {self.api_key}'})
-                        if response.status_code == 429:
-                            break
-                        response.raise_for_status()
-                        result = response.json()
-                        if not result.get('choices'):
-                            raise LLMError('LLM returned no choices')
-                        return result
-                    except (httpx.TimeoutException, httpx.TransportError, httpx.HTTPStatusError) as exc:
-                        retryable = not isinstance(exc, httpx.HTTPStatusError) or exc.response.status_code >= 500
-                        if not retryable or attempt == 2:
-                            if not retryable:
-                                raise LLMError(f'LLM request failed: {exc}') from exc
-                            break
-                        await asyncio.sleep((1, 3)[attempt])
-        raise LLMError('LLM unavailable after retries and fallback')
+class LLMNotConfigured(LLMError):
+    pass
 
-    async def stream_chat(self, messages: list[dict[str, Any]]):
-        payload = {'model': self.model, 'messages': messages, 'stream': True}
-        async with httpx.AsyncClient(timeout=60, transport=self.transport) as client:
-            async with client.stream('POST', self.base_url + '/v1/chat/completions', json=payload,
-                                     headers={'Authorization': f'Bearer {self.api_key}'}) as response:
-                response.raise_for_status()
-                async for line in response.aiter_lines():
-                    if not line.startswith('data: '):
-                        continue
-                    data = line[6:]
-                    if data == '[DONE]':
-                        return
-                    try:
-                        delta = json.loads(data)['choices'][0]['delta'].get('content')
-                    except (ValueError, KeyError, IndexError, TypeError):
-                        continue
-                    if delta:
-                        yield delta
+
+class _Retryable(Exception):
+    pass
+
+
+def _log_call(model: str, usage: Dict[str, Any], duration: float) -> None:
+    try:
+        db = SessionLocal()
+        try:
+            db.add(OperationLog(
+                user_id=None,
+                action="llm_call",
+                target=model,
+                detail={
+                    "prompt_tokens": usage.get("prompt_tokens"),
+                    "completion_tokens": usage.get("completion_tokens"),
+                    "duration_ms": int(duration * 1000),
+                },
+            ))
+            db.commit()
+        finally:
+            db.close()
+    except Exception:
+        pass
+
+
+def parse_json(content: str) -> Dict[str, Any]:
+    text = (content or "").strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1] if "\n" in text else text
+        if text.rstrip().endswith("```"):
+            text = text.rstrip()[:-3]
+    start = text.find("{")
+    end = text.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        raise LLMError("LLM 未返回 JSON：" + content[:200])
+    try:
+        return json.loads(text[start:end + 1])
+    except ValueError:
+        raise LLMError("LLM 返回的 JSON 无法解析：" + text[start:start + 200])
+
+
+async def _stream_once(client: httpx.AsyncClient, url, headers, payload, model, t0) -> AsyncIterator[str]:
+    usage = {}
+    async with client.stream("POST", url, json=payload, headers=headers) as resp:
+        if resp.status_code == 429 or resp.status_code >= 500:
+            raise _Retryable("HTTP %d" % resp.status_code)
+        resp.raise_for_status()
+        async for line in resp.aiter_lines():
+            if not line.startswith("data:"):
+                continue
+            chunk = line[5:].strip()
+            if chunk == "[DONE]":
+                break
+            try:
+                obj = json.loads(chunk)
+            except ValueError:
+                continue
+            usage = obj.get("usage") or usage
+            choices = obj.get("choices") or []
+            if choices:
+                delta = choices[0].get("delta", {}).get("content")
+                if delta:
+                    yield delta
+    _log_call(model, usage, time.time() - t0)
+
+
+async def chat(
+    messages: List[Dict[str, Any]],
+    tools: Optional[List[Dict[str, Any]]] = None,
+    stream: bool = False,
+    json_mode: bool = False,
+) -> Union[str, AsyncIterator[str]]:
+    """统一 LLM 调用入口：超时 60s，超时/5xx 重试（退避 1s/3s），429 或重试失败切备用模型。"""
+    if not settings.llm_api_key:
+        raise LLMNotConfigured("LLM_API_KEY 未配置")
+
+    url = settings.llm_base_url.rstrip("/") + "/v1/chat/completions"
+    headers = {"Authorization": "Bearer " + settings.llm_api_key}
+    payload = {"messages": messages, "stream": stream}
+    if json_mode:
+        payload["response_format"] = {"type": "json_object"}
+    if tools:
+        payload["tools"] = tools
+
+    attempts = [
+        (settings.llm_model, 0),
+        (settings.llm_model, 1),
+        (settings.llm_fallback_model, 3),
+    ]
+    last_error: Optional[Exception] = None
+    for model, delay in attempts:
+        if delay:
+            await asyncio.sleep(delay)
+        payload["model"] = model
+        t0 = time.time()
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                if stream:
+                    return _stream_once(client, url, headers, payload, model, t0)
+                r = await client.post(url, json=payload, headers=headers)
+                if r.status_code == 429 or r.status_code >= 500:
+                    raise _Retryable("HTTP %d" % r.status_code)
+                r.raise_for_status()
+                data = r.json()
+                _log_call(model, data.get("usage") or {}, time.time() - t0)
+                return data["choices"][0]["message"]["content"]
+        except (_Retryable, httpx.TimeoutException) as e:
+            last_error = e
+    raise LLMError("LLM 调用失败：%s" % last_error)

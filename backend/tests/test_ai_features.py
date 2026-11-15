@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import httpx
 import pytest
 from app.services.ai_features import analyze_trend, assess_health, draft_report
-from app.services.llm import LLMClient, LLMError
+from app.services.llm_client import LLMClient, LLMError
 
 def client_for(value):
     def handler(request):

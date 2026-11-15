@@ -1,7 +1,7 @@
 import json
 import httpx
 import pytest
-from app.services.llm import LLMClient, LLMError
+from app.services.llm_client import LLMClient, LLMError
 from app.services.ai_features import diagnose
 
 @pytest.mark.asyncio

@@ -4,7 +4,7 @@ import re
 from datetime import datetime, timedelta
 from math import isfinite
 from . import prompts
-from .llm import LLMClient, LLMError
+from .llm_client import LLMClient, LLMError
 
 def _content(result: dict) -> str:
     try:

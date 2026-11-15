@@ -1,6 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+
+# 运行产物
+backend/greenmind.db
+backend/uploads/
+
+# 密钥与环境
 .env
 .env.*
 !.env.example
-__pycache__/
-.pytest_cache/
-*.pyc
+
+# IDE
+.idea/
+
+# 其他
+*.log
